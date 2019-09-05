@@ -1,0 +1,40 @@
+{
+    "name": "joesama/pintu",
+    "description": "Another utilities package for routing & policy",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ahmed Johari Jumali",
+            "email": "joharijumali@gmail.com",
+            "homepage": "https://github.com/joesama/pintu"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "laravel/framework": "~5.8.9"
+    },
+    "require-dev": {
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "^3.8",
+        "phpunit/phpunit": "^7.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Joesama\\Pintu\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Joesama\\Pintu\\PintuProvider"
+            ]
+        }
+    },
+    "minimum-stability": "master"
+}

@@ -1,0 +1,17 @@
+{
+    "component": {
+        "controller": {
+            "function": {
+                "keymap":"id",
+                "named":""
+            }
+        }
+    },
+    "api": {
+        "get": {},
+        "post": {},
+        "put": {},
+        "patch": {},
+        "delete": {}
+    }
+}
