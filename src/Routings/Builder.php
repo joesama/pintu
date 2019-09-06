@@ -4,6 +4,7 @@ namespace Joesama\Pintu\Routings;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Collection;
 use Joesama\Pintu\Routings\Concerns\Grammar;
 use Joesama\Pintu\Components\Manager as ComponentManager;
 
@@ -14,16 +15,16 @@ class Builder
     /**
      * Array of component.
      *
-     * @var array
+     * @var Collection
      */
-    private $componentArray;
+    private $componentCollection;
 
     /**
      * Array of API
      *
-     * @var array
+     * @var Collection
      */
-    private $apiArray;
+    private $apiCollection;
 
     /**
      * Array of methods.
@@ -39,9 +40,9 @@ class Builder
      */
     public function __construct(ComponentManager $component)
     {
-        $this->componentArray = $component->getComponent();
+        $this->componentCollection = $component->getComponent();
 
-        $this->apiArray = $component->getApi();
+        $this->apiCollection = $component->getApi();
     }
 
     /**
@@ -69,7 +70,7 @@ class Builder
     {
         // $this->componentMethods = Router::$verbs;
 
-        collect($this->componentArray)->each(function ($component, $controller) use ($router) {
+        $this->componentCollection->each(function ($component, $controller) use ($router) {
             collect($component)->each(function ($attributes, $function) use ($controller, $router) {
                 $router->group(['prefix' => $controller], function (Router $router) use ($controller, $function, $attributes) {
                     collect($this->componentMethods)->each(function ($type) use ($router, $controller, $function, $attributes) {
@@ -95,7 +96,7 @@ class Builder
      */
     private function apiRouting(Router $router)
     {
-        collect($this->apiArray)->each(function ($routes, $method) use ($router) {
+        $this->apiCollection->each(function ($routes, $method) use ($router) {
             if (!empty($routes)) {
                 list($path, $controller, $named) = Arr::first($routes);
                 $router->addRoute(

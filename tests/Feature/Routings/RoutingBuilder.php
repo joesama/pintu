@@ -45,6 +45,5 @@ class RoutingBuilder extends TestCase
         $this->assertObjectHasAttribute('componentManager', $routerServices);
 
         $this->assertObjectHasAttribute('routerManager', $routerServices);
-
     }
 }
