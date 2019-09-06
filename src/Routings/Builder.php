@@ -21,7 +21,7 @@ class Builder
     /**
      * Array of API
      *
-     * @vararray
+     * @var array
      */
     private $apiArray;
 

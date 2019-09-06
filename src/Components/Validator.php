@@ -21,7 +21,7 @@ class Validator
      *
      * @return bool
      */
-    public function validate(): boolean
+    public function validate(): bool
     {
         $this->stubs = $this->componentStub();
 
@@ -38,7 +38,7 @@ class Validator
     {
         list($keys, $values) = Arr::divide($this->stubs);
 
-        $api = Arr::where($keys, function ($key, $value) {
+        $api = Arr::where($keys, function ($key) {
             return !Arr::exists($this->component, $key);
         });
 

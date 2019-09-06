@@ -54,7 +54,7 @@ class Manager
      */
     public function getComponent(): Collection
     {
-        return Collection::make(Arr::get($this->component, 'component'));
+        return Collection::make($this->component->get('component'));
     }
 
     /**
@@ -64,17 +64,17 @@ class Manager
      */
     public function getApi(): Collection
     {
-        return Collection::make(Arr::get($this->component, 'api'));
+        return Collection::make($this->component->get('api'));
     }
 
     /**
      * Get the component resources.
      *
-     * @return array
+     * @return Collection
      */
-    private function componentSource(): array
+    private function componentSource(): Collection
     {
-        $componentFile = collect(
+        $componentFile = Collection::make(
             Finder::create()
             ->files()
             ->name(self::FILE_NAME . self::FILE_EXT)
@@ -83,7 +83,7 @@ class Manager
 
         $content = include $componentFile->getRealPath();
 
-        return $content;
+        return Collection::make($content);
     }
 
     /**

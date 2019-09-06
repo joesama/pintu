@@ -1,46 +1,50 @@
 <?php
 namespace Tests\Feature\Routings;
 
-use Illuminate\Support\Arr;
+use Mockery as mock;
 use Illuminate\Routing\Router;
+use PHPUnit\Framework\TestCase;
 use Joesama\Pintu\PintuProvider;
-use Orchestra\Testbench\TestCase;
 use Joesama\Pintu\Services\RoutingServices;
+use Illuminate\Contracts\Foundation\Application;
 
 class RoutingBuilder extends TestCase
 {
-    
-    protected $router;
-    
-    protected $testNameSpace;
-
-    /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app)
+    protected function tearDown(): void
     {
-        $this->router = $app->make(Router::class);
-
-        $this->testNameSpace = new PintuProvider($app);
+        mock::close();
     }
 
     /** @test */
     public function callRoutingServices()
     {
-        $routerServices = new RoutingServices($this->testNameSpace);
+        $app = mock::mock(Application::class);
 
-        $routerServices->router($this->router);
+        $serviceProvider = new PintuProvider($app);
 
-        // list($keys, $values) = Arr::divide(collect($this->router->getRoutes())->toArray());
-// dd($values);
-        // $this->assertContains('GET', $routedArray);
+        $routerServices = new RoutingServices($serviceProvider);
 
-        // $this->assertContains('POST', $routedArray);
+        $this->assertInstanceOf(RoutingServices::class, $routerServices);
+    }
 
-        // $this->assertContains('PUT', $routedArray);
-        // dd(\get_class_methods($this->router));
+    /** @test */
+    public function getRouting()
+    {
+        $app = mock::mock(Application::class);
+
+        $router = mock::mock(Router::class);
+
+        $serviceProvider = new PintuProvider($app);
+
+        $routerServices = new RoutingServices($serviceProvider);
+
+        $router->shouldReceive('group')->twice();
+
+        $routerServices->router($router);
+
+        $this->assertObjectHasAttribute('componentManager', $routerServices);
+
+        $this->assertObjectHasAttribute('routerManager', $routerServices);
+
     }
 }

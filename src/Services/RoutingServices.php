@@ -15,6 +15,13 @@ class RoutingServices
     /**
      * Component manager.
      *
+     * @var Joesama\Pintu\Routings\Manager
+     */
+    protected $routerManager;
+
+    /**
+     * Component manager.
+     *
      * @var Joesama\Pintu\Components\Manager
      */
     protected $componentManager;
@@ -38,8 +45,8 @@ class RoutingServices
      */
     public function router(Router $router): void
     {
-        $manager = new Manager($this->componentManager);
+        $this->routerManager = new Manager($this->componentManager);
 
-        $manager->routingRegistration($router);
+        $this->routerManager->routingRegistration($router);
     }
 }
