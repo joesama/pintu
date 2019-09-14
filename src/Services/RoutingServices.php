@@ -7,7 +7,6 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
 use Joesama\Pintu\Routings\Manager;
 use Illuminate\Support\ServiceProvider;
-use Joesama\Pintu\Services\ComponentServices;
 use Joesama\Pintu\Components\Manager as Component;
 
 class RoutingServices

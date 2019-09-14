@@ -3,22 +3,18 @@ namespace Joesama\Pintu;
 
 use Illuminate\Support\ServiceProvider;
 use Joesama\Pintu\Consoles\ComponentGenerator;
+use Joesama\Pintu\Services\Traits\PintuOrchestraRouting;
 
 class PintuProvider extends ServiceProvider
 {
     /**
-     * Bootstrap any application services.
+     * List all registered commands.
      *
-     * @return void
+     * @var array
      */
-    public function boot()
-    {
-        // if ($this->app->runningInConsole()) {
-            $this->commands([
-                ComponentGenerator::class
-            ]);
-        // }
-    }
+    protected $console = [
+        ComponentGenerator::class
+    ];
 
     /**
      * Register class functionality.
@@ -27,8 +23,6 @@ class PintuProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->commands([
-            ComponentGenerator::class
-        ]);
+        $this->commands($this->console);
     }
 }

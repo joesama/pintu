@@ -10,9 +10,9 @@ use Illuminate\Support\ServiceProvider;
 
 class Manager
 {
-    const FILE_NAME = 'component';
+    private const FILE_NAME = 'component';
 
-    const FILE_EXT = '.php';
+    private const FILE_EXT = '.php';
 
     /**
      * Component Path
@@ -68,20 +68,46 @@ class Manager
     }
 
     /**
+     * Return the component file path.
+     *
+     * @return string
+     */
+    public function getComponentFilePath(): string
+    {
+        return $this->componentPath .'/' . self::FILE_NAME . self::FILE_EXT;
+    }
+
+    /**
+     * Return the component file stub.
+     *
+     * @return string
+     */
+    public function getComponentFileStub(): string
+    {
+        return __DIR__.'/stubs/component.stub';
+    }
+
+    /**
      * Get the component resources.
      *
      * @return Collection
      */
     private function componentSource(): Collection
     {
-        $componentFile = Collection::make(
-            Finder::create()
-            ->files()
-            ->name(self::FILE_NAME . self::FILE_EXT)
-            ->in(realpath($this->componentPath))
-        )->first();
+        $content = [];
 
-        $content = include $componentFile->getRealPath();
+        if (realpath($this->componentPath) !== false) {
+            $componentFile = Collection::make(
+                Finder::create()
+                ->files()
+                ->name(self::FILE_NAME . self::FILE_EXT)
+                ->in($this->componentPath)
+            )->first();
+
+            if ($componentFile !== null) {
+                $content = include $componentFile->getRealPath();
+            }
+        }
 
         return Collection::make($content);
     }
@@ -101,14 +127,6 @@ class Manager
 
         $baseDir = dirname($reflector->getFileName(), $classNameSpace->count());
 
-        $filename = $baseDir . '/' . self::FILE_NAME;
-
-        $componentPath = \realpath($filename);
-
-        if (!$componentPath) {
-            throw new Exception("Component directory { $filename } not found", 1);
-        }
-
-        return $componentPath;
+        return $baseDir . '/' . self::FILE_NAME;
     }
 }

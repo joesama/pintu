@@ -17,9 +17,8 @@ trait Grammar
     protected function pathConvention(string $type, string $function, array $attributes): string
     {
         $keymap = Arr::get($attributes, 'keymap');
-    
+        
         if (\is_string($keymap)) {
-
             if (Str::length($keymap) > 0) {
                 $keymap = [$keymap];
             } else {
@@ -27,16 +26,9 @@ trait Grammar
             }
         }
 
-        if (Str::lower($type) == 'head') {
+        if (Str::lower($type) === 'head') {
             if (!in_array('id', $keymap)) {
-                dump(collect($keymap));
-                try {
-                    $keymap = Arr::prepend($keymap, 'id');
-                } catch (\Exception $th) {
-                    dd($th->getMessage());
-                }
-                
-                dump(collect($keymap));
+                $keymap = Arr::prepend($keymap, 'id');
             }
         }
 
@@ -49,7 +41,6 @@ trait Grammar
 
             return $function . '/' . $keymap;
         }
-
     }
 
     /**
@@ -81,7 +72,7 @@ trait Grammar
 
         if ($named === '' || $named === null) {
             $named = $controller.'.'.$function;
-        };
+        }
 
         return Str::lower($named);
     }

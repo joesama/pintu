@@ -3,7 +3,6 @@ namespace Joesama\Pintu\Routings;
 
 use Illuminate\Support\Str;
 use Illuminate\Routing\Router;
-use Joesama\Pintu\Routings\Builder;
 use Joesama\Pintu\Components\Manager as Component;
 
 class Manager
