@@ -1,4 +1,4 @@
-FROM php:7.3-cli-alpine
+FROM php:7.3-alpine
 
 LABEL "com.github.actions.name"="phpunit-test"
 LABEL "com.github.actions.description"="Run phpunit test suite"
