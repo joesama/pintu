@@ -25,7 +25,7 @@ class ComponentGenerator extends Command
      *
      * @var string
      */
-    protected $description = 'Define package component & routing';
+    protected $description = 'Create package component & routing configuration file.';
 
     /**
      * Execute the console command.
@@ -38,9 +38,7 @@ class ComponentGenerator extends Command
 
         $provider = $this->isServiceProvider($app, $providerOption);
 
-        if (!$this->fileIsExist($providerOption)
-            &&
-            ($provider === false) ) {
+        if ($provider === false) {
             return false;
         }
 
@@ -50,18 +48,15 @@ class ComponentGenerator extends Command
 
         $stub = $file->get($manager->getComponentFileStub());
 
-        $this->alreadyExist($file, $filePath);
-
-        $this->forceTriggered($file, $filePath);
-
-        if (! $file->isDirectory(dirname($filePath))) {
-            $file->makeDirectory(dirname($filePath), 0655, true, true);
+        if ($this->forceTriggered($file, $filePath)) {
+            if (! $file->isDirectory(dirname($filePath))) {
+                $file->makeDirectory(dirname($filePath), 0655, true, true);
+            }
+    
+            $file->put($filePath, $stub);
+    
+            $this->line('Component file successfully created!');
         }
-
-        $file->put($filePath, $stub);
-
-        $this->line('Component file successfully created!');
-
     }
 
     /**
@@ -85,13 +80,17 @@ class ComponentGenerator extends Command
     /**
      * Provider passed is registered provider.
      *
-     * @param [type] $app
+     * @param Application $app
      * @param string $providerOption
      *
      * @return bool
      */
-    private function isServiceProvider($app, string $providerOption)
+    private function isServiceProvider(Application $app, string $providerOption = null)
     {
+        if (!$this->fileIsExist($providerOption)) {
+            return false;
+        }
+
         $provider = Arr::first($app->getProviders($providerOption));
 
         if ($provider === null) {
@@ -104,31 +103,23 @@ class ComponentGenerator extends Command
     }
 
     /**
-     * Validate if component file already exist.
+     * Process if --force indicator is used.
      *
-     * @return void
+     * @param Filesystem $file
+     * @param string $filePath
+     *
+     * @return bool
      */
-    private function alreadyExist($file, $filePath)
+    private function forceTriggered(Filesystem $file, string $filePath): bool
     {
         if (! $this->option('force') && $file->exists($filePath)) {
             $this->error(
-                'Component file already exists!. Please use --force to re-create component file'
+                'Component file already exists!. Please use --force or -f to re-create component file'
             );
 
-            exit;
+            return false;
         }
-    }
 
-    /**
-     * Process if --force indicator is used.
-     *
-     * @param [type] $file
-     * @param [type] $filePath
-     *
-     * @return void
-     */
-    private function forceTriggered($file, $filePath)
-    {
         if ($this->option('force') && $file->exists($filePath)) {
             $force = $this->choice(
                 'This will replace current component file. Do you wish to continoue?',
@@ -137,11 +128,13 @@ class ComponentGenerator extends Command
 
             if ($force === 'N') {
                 $this->line('Component file are remained same!!!');
-                
-                exit;
-            }
 
-            $file->copy($filePath, \str_replace('component.php', date('dmyHis') . '.php', $filePath));
+                return false;
+            } else {
+                $file->copy($filePath, \str_replace('component.php', date('dmyHis') . '.php', $filePath));
+            }
         }
+
+        return true;
     }
 }

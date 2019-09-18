@@ -6,6 +6,7 @@ use Illuminate\Routing\Router;
 use PHPUnit\Framework\TestCase;
 use Joesama\Pintu\PintuProvider;
 use Joesama\Pintu\Services\RoutingServices;
+use Joesama\Project\ProjectServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 
 class RoutingBuilder extends TestCase
@@ -34,11 +35,11 @@ class RoutingBuilder extends TestCase
 
         $router = mock::mock(Router::class);
 
+        $router->shouldReceive('group')->twice();
+
         $serviceProvider = new PintuProvider($app);
 
         $routerServices = new RoutingServices($serviceProvider);
-
-        $router->shouldReceive('group')->twice();
 
         $routerServices->router($router);
 

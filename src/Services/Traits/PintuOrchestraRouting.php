@@ -16,7 +16,7 @@ trait PintuOrchestraRouting
             $routerServices = new \Joesama\Pintu\Services\RoutingServices($this);
 
             $routerServices->router($router);
-
+            
             require $path;
         };
     }

@@ -1,33 +1,12 @@
 <?php
 
 return [
-    'component' => [
-        'routing' => [
-            'manager' => [
-                'keymap' => ['mapped']
-            ]
-        ],
-        'component' => [
-            'manager' => [
-                'keymap' => 'mapped'
-            ]
-        ]
-    ],
+    'component' => [],
     'api' => [
-        'get' => [
-
-        ],
-        'post' => [
-
-        ],
-        'put' => [
-
-        ],
-        'patch' => [
-
-        ],
-        'delete' => [
-            
-        ]
+        'get' => [],
+        'post' => [],
+        'put' => [],
+        'patch' => [],
+        'delete' => []
     ]
 ];
