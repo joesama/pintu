@@ -7,6 +7,7 @@ jobs:
     strategy:
       matrix:
         php: [7.3,7.2]
+        phpunit: [7.5.15]
     runs-on: ubuntu-latest
     container:
       image: php:${{ matrix.php }}-apache
@@ -50,15 +51,24 @@ jobs:
 
     - name: Run composer install
       run: |
-        composer install -vvv --profile -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+        composer install -vvv --profile --prefer-dist --dev
 
     - name: Install PHPUnit
       run: | 
-        composer require phpunit/phpunit
+        composer global require "phpunit/phpunit=${{ matrix.phpunit }}"
+
+    - name: Install Mockery
+      run: | 
+        composer global require "mockery/mockery=^1.1"
 
     - name: Install PHPInsight
       run: | 
-        composer require nunomaduro/phpinsights
+        composer global require nunomaduro/phpinsights
+    
+    - name: Run PHPUnit
+      run: |
+        ~/.composer/vendor/bin/phpunit $GITHUB_WORKSPACE
+
     - name: Run PHPInsight
       run: php artisan insight
 
