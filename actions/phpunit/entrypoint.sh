@@ -1,5 +1,5 @@
 #!/bin/sh -l
-set -eu
+sh -c "echo 'Running unit tests'"
 
 #  Run phpunit Tests
-vendor/bin/phpunit $*
+vendor/bin/phpunit

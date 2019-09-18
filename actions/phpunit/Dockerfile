@@ -5,5 +5,7 @@ LABEL "com.github.actions.description"="Run phpunit test suite"
 LABEL "com.github.actions.icon"="check-circle"
 LABEL "com.github.actions.color"="green"
 
+
 ADD entrypoint.sh /entrypoint.sh
+
 ENTRYPOINT ["/entrypoint.sh"]
