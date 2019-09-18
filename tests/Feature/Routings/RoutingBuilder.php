@@ -6,7 +6,6 @@ use Illuminate\Routing\Router;
 use PHPUnit\Framework\TestCase;
 use Joesama\Pintu\PintuProvider;
 use Joesama\Pintu\Services\RoutingServices;
-use Joesama\Project\ProjectServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 
 class RoutingBuilder extends TestCase

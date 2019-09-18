@@ -1,10 +1,7 @@
 <?php
 namespace Joesama\Pintu\Services;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Collection;
 use Joesama\Pintu\Routings\Manager;
 use Illuminate\Support\ServiceProvider;
 use Joesama\Pintu\Components\Manager as Component;

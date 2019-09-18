@@ -27,12 +27,12 @@ trait Grammar
         }
 
         if (Str::lower($type) === 'head') {
-            if (!in_array('id', $keymap)) {
+            if (! in_array('id', $keymap)) {
                 $keymap = Arr::prepend($keymap, 'id');
             }
         }
 
-        if (!\is_array($keymap) || empty($keymap)) {
+        if (! \is_array($keymap) || empty($keymap)) {
             return $function;
         } else {
             $keymap = collect($keymap)->map(function ($id) {

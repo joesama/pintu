@@ -18,7 +18,5 @@ class ProviderTest extends TestCase
         $this->assertClassHasAttribute('defer', PintuProvider::class);
 
         app()->resolveProvider(PintuProvider::class)->commands([ComponentGenerator::class]);
-
     }
-    
 }

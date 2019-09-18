@@ -3,7 +3,6 @@ namespace Joesama\Pintu;
 
 use Illuminate\Support\ServiceProvider;
 use Joesama\Pintu\Consoles\ComponentGenerator;
-use Joesama\Pintu\Services\Traits\PintuOrchestraRouting;
 
 class PintuProvider extends ServiceProvider
 {

@@ -97,7 +97,7 @@ class Builder
     private function apiRouting(Router $router)
     {
         $this->apiCollection->each(function ($routes, $method) use ($router) {
-            if (!empty($routes)) {
+            if (! empty($routes)) {
                 list($path, $controller, $named) = Arr::first($routes);
                 $router->addRoute(
                     Str::upper($method),

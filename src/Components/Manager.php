@@ -3,7 +3,6 @@ namespace Joesama\Pintu\Components;
 
 use Exception;
 use ReflectionClass;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Support\ServiceProvider;
@@ -35,7 +34,7 @@ class Manager
      */
     public function __construct($componentProvider)
     {
-        if (!($componentProvider instanceof ServiceProvider)) {
+        if (! ($componentProvider instanceof ServiceProvider)) {
             throw new Exception(
                 \get_class($componentProvider) . ' must an instance of ' .  \basename(ServiceProvider::class),
                 1

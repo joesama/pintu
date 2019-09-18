@@ -87,7 +87,7 @@ class ComponentGenerator extends Command
      */
     private function isServiceProvider(Application $app, string $providerOption = null)
     {
-        if (!$this->fileIsExist($providerOption)) {
+        if (! $this->fileIsExist($providerOption)) {
             return false;
         }
 
