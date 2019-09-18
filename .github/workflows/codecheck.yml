@@ -6,7 +6,7 @@ jobs:
     name: Code-Check
     strategy:
       matrix:
-        php: [7.3,7.2]
+        php: [7.3]
     runs-on: ubuntu-latest
     container:
       image: php:${{ matrix.php }}-apache
