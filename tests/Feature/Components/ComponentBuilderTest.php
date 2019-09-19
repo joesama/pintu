@@ -1,6 +1,8 @@
 <?php
+
 namespace Tests\Feature\Components;
 
+use ReflectionClass;
 use Illuminate\Routing\Router;
 use Joesama\Pintu\PintuProvider;
 use Orchestra\Testbench\TestCase;
@@ -21,7 +23,7 @@ class ComponentBuilderTest extends TestCase
     {
         $this->router = $app->make(Router::class);
 
-        $this->testNameSpace = new PintuProvider($app);
+        $this->testNameSpace = new ReflectionClass(PintuProvider::class);
     }
 
     /**
@@ -30,7 +32,7 @@ class ComponentBuilderTest extends TestCase
      */
     public function theComponentServicesIsExist()
     {
-        $file = realpath(__DIR__.'/../../../src/Services/ComponentServices.php');
+        $file = realpath(__DIR__ . '/../../../src/Services/ComponentServices.php');
 
         $this->assertFileExists($file);
     }

@@ -1,7 +1,10 @@
 <?php
+
 namespace Tests\Feature\Routings;
 
 use Mockery as mock;
+use ReflectionClass;
+use Illuminate\Support\Arr;
 use Illuminate\Routing\Router;
 use PHPUnit\Framework\TestCase;
 use Joesama\Pintu\PintuProvider;
@@ -34,16 +37,14 @@ class RoutingBuilder extends TestCase
 
         $router = mock::mock(Router::class);
 
-        $router->shouldReceive('group')->twice();
+        $router->shouldReceive('group')->once();
 
-        $serviceProvider = new PintuProvider($app);
+        $provider = new ReflectionClass(PintuProvider::class);
 
-        $routerServices = new RoutingServices($serviceProvider);
+        $properties = $provider->getDefaultProperties();
 
-        $routerServices->router($router);
+        $namespace = Arr::get($properties, 'namespace', null);
 
-        $this->assertObjectHasAttribute('componentManager', $routerServices);
-
-        $this->assertObjectHasAttribute('routerManager', $routerServices);
+        RoutingServices::router($provider, $router, $namespace);
     }
 }

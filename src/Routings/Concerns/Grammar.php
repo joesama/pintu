@@ -1,4 +1,5 @@
 <?php
+
 namespace Joesama\Pintu\Routings\Concerns;
 
 use Illuminate\Support\Arr;
@@ -16,23 +17,11 @@ trait Grammar
      */
     protected function pathConvention(string $type, string $function, array $attributes): string
     {
-        $keymap = Arr::get($attributes, 'keymap');
-        
-        if (\is_string($keymap)) {
-            if (Str::length($keymap) > 0) {
-                $keymap = [$keymap];
-            } else {
-                $keymap = [];
-            }
-        }
+        $keymap = $this->keymapIsString(Arr::get($attributes, 'keymap'));
 
-        if (Str::lower($type) === 'head') {
-            if (! in_array('id', $keymap)) {
-                $keymap = Arr::prepend($keymap, 'id');
-            }
-        }
+        $keymap = $this->appendIdParameter($keymap);
 
-        if (! \is_array($keymap) || empty($keymap)) {
+        if (!\is_array($keymap) || empty($keymap)) {
             return $function;
         } else {
             $keymap = collect($keymap)->map(function ($id) {
@@ -41,6 +30,41 @@ trait Grammar
 
             return $function . '/' . $keymap;
         }
+    }
+
+    /**
+     * Check if keymap is string.
+     *
+     * @param $keymap
+     *
+     * @return array
+     */
+    private function keymapIsString($keymap): array
+    {
+        if (\is_string($keymap) && Str::length($keymap) > 0) {
+            return [$keymap];
+        }
+
+        return [];
+    }
+
+    /**
+     * Append ID parameter.
+     *
+     * @param array $keymap
+     *
+     * @return array
+     */
+    private function appendIdParameter(array $keymap): array
+    {
+        // @todo Need to analize the need on default id parameter.
+        // if (Str::lower($type) === 'head') {
+        //     if (!in_array('id', $keymap)) {
+        //         $keymap = Arr::prepend($keymap, 'id');
+        //     }
+        // }
+
+        return $keymap;
     }
 
     /**
@@ -54,7 +78,7 @@ trait Grammar
      */
     protected function classConvention(string $type, string $controller, string $function): string
     {
-        return Str::ucfirst($controller) . 'Controller@' . Str::camel(Str::lower($type) .'_'. $function);
+        return Str::ucfirst($controller) . 'Controller@' . Str::camel(Str::lower($type) . '_' . $function);
     }
 
     /**
@@ -71,7 +95,7 @@ trait Grammar
         $named = Arr::get($attributes, 'named', null);
 
         if ($named === '' || $named === null) {
-            $named = $controller.'.'.$function;
+            $named = $controller . '.' . $function;
         }
 
         return Str::lower($named);

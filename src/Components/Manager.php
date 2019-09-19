@@ -1,4 +1,5 @@
 <?php
+
 namespace Joesama\Pintu\Components;
 
 use Exception;
@@ -6,9 +7,12 @@ use ReflectionClass;
 use Illuminate\Support\Collection;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Support\ServiceProvider;
+use Joesama\Pintu\Components\Concerns\Grammar;
 
 class Manager
 {
+    use Grammar;
+
     private const FILE_NAME = 'component';
 
     private const FILE_EXT = '.php';
@@ -26,24 +30,33 @@ class Manager
      * @var Collection
      */
     protected $component;
-    
+
+    /**
+     * Component controller namespace.
+     *
+     * @var array
+     */
+    protected $controllerNamespace;
+
     /**
      * Initiate Component Manager.
      *
      * @param array $component
      */
-    public function __construct($componentProvider)
+    public function __construct(ReflectionClass $providerReflection)
     {
-        if (! ($componentProvider instanceof ServiceProvider)) {
+        if (!$providerReflection->isSubclassOf(ServiceProvider::class)) {
             throw new Exception(
-                \get_class($componentProvider) . ' must an instance of ' .  \basename(ServiceProvider::class),
+                $providerReflection->getName() . ' must an instance of ' .  \basename(ServiceProvider::class),
                 1
             );
         }
 
-        $this->componentPath = $this->componentPath($componentProvider);
+        $this->componentPath = $this->componentPath($providerReflection);
 
         $this->component = $this->componentSource();
+
+        $this->controllerNamespace = $this->registerNamespace($providerReflection);
     }
 
     /**
@@ -73,7 +86,7 @@ class Manager
      */
     public function getComponentFilePath(): string
     {
-        return $this->componentPath .'/' . self::FILE_NAME . self::FILE_EXT;
+        return $this->componentPath . '/' . self::FILE_NAME . self::FILE_EXT;
     }
 
     /**
@@ -83,7 +96,17 @@ class Manager
      */
     public function getComponentFileStub(): string
     {
-        return __DIR__.'/stubs/component.stub';
+        return __DIR__ . '/stubs/component.stub';
+    }
+
+    /**
+     * Get default component name space.
+     *
+     * @return array
+     */
+    public function getComponentNameSpace(): array
+    {
+        return $this->controllerNamespace;
     }
 
     /**
@@ -98,9 +121,9 @@ class Manager
         if (realpath($this->componentPath) !== false) {
             $componentFile = Collection::make(
                 Finder::create()
-                ->files()
-                ->name(self::FILE_NAME . self::FILE_EXT)
-                ->in($this->componentPath)
+                    ->files()
+                    ->name(self::FILE_NAME . self::FILE_EXT)
+                    ->in($this->componentPath)
             )->first();
 
             if ($componentFile !== null) {
@@ -114,17 +137,15 @@ class Manager
     /**
      * Get the path for define component.
      *
-     * @param ServiceProvider $provider
+     * @param ReflectionClass $providerReflection
      *
      * @return string
      */
-    private function componentPath(ServiceProvider $provider): string
+    private function componentPath(ReflectionClass $providerReflection): string
     {
-        $reflector = new ReflectionClass($provider);
-       
-        $classNameSpace = Collection::make(explode('\\', $reflector->getNamespaceName()));
+        $classNameSpace = Collection::make(explode('\\', $providerReflection->getNamespaceName()));
 
-        $baseDir = dirname($reflector->getFileName(), $classNameSpace->count());
+        $baseDir = dirname($providerReflection->getFileName(), $classNameSpace->count());
 
         return $baseDir . '/' . self::FILE_NAME;
     }

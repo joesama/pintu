@@ -1,9 +1,10 @@
 <?php
+
 namespace Joesama\Pintu\Services;
 
+use ReflectionClass;
 use Illuminate\Support\Collection;
 use Joesama\Pintu\Components\Manager;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\Arrayable;
 
 class ComponentServices implements Arrayable
@@ -20,9 +21,9 @@ class ComponentServices implements Arrayable
      *
      * @param array $provider
      */
-    public function __construct(ServiceProvider $provider)
+    public function __construct(ReflectionClass $providerReflection)
     {
-        $this->manager = new Manager($provider);
+        $this->manager = new Manager($providerReflection);
     }
 
     /**
