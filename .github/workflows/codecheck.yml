@@ -62,7 +62,7 @@ jobs:
 
     - name: Install PHPInsight
       run: |
-        composer require nunomaduro/phpinsights -vvv --profile --prefer-dist
+        composer require nunomaduro/phpinsights -vvv --profile
 
     - name: PHPInsight
       run: |

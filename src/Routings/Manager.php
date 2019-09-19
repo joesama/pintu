@@ -41,7 +41,7 @@ class Manager
      */
     public function routingRegistration(Router $router)
     {
-        $builder = new Builder($router, $this->namespace);
+        $builder = new Builder($router);
 
         $builder->componentRouting($this->component->getComponent(), $this->getComponentNameSpace());
 

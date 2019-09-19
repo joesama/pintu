@@ -1,24 +1,30 @@
 <?php
+
 namespace Joesama\Pintu\Consoles;
 
+use ReflectionClass;
 use Illuminate\Support\Arr;
+use PhpSchool\CliMenu\CliMenu;
 use Illuminate\Console\Command;
+use PhpSchool\CliMenu\MenuStyle;
+use PhpSchool\CliMenu\Input\Text;
+use PhpSchool\CliMenu\Input\InputIO;
 use Illuminate\Filesystem\Filesystem;
 use Joesama\Pintu\Components\Manager;
 use Illuminate\Support\ServiceProvider;
+use PhpSchool\CliMenu\Action\GoBackAction;
+use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 use Illuminate\Contracts\Foundation\Application;
 
 class ComponentGenerator extends Command
 {
+    private $serviceProvider;
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'pintu 
-        { provider : Fully qualified service provider name }
-        { --f|force : Force to recreate component file. }
-    ';
+    protected $signature = 'pintu';
 
     /**
      * The console command description.
@@ -34,29 +40,51 @@ class ComponentGenerator extends Command
      */
     public function handle(Application $app, Filesystem $file)
     {
-        $providerOption = $this->argument('provider');
+        $placeHolder = 'Joesama\\Pintu\\PintuProvider';
 
-        $provider = $this->isServiceProvider($app, $providerOption);
+        $console = $this;
 
-        if ($provider === false) {
-            return false;
-        }
+        $itemCallable = function (CliMenu $menu) use ($placeHolder, $console, $file) {
+            $successStyle = (new MenuStyle)
+                ->setBg('254')
+                ->setFg('166');
 
-        $manager = new Manager($provider);
+            $result = $menu->askText($successStyle)
+                ->setPromptText('Type service provider namespace. [esc] to exit')
+                ->setPlaceholderText($placeHolder)
+                ->setValidationFailedText('Please type full qualified service provider namespace')
+                ->setValidator(function ($provider) use ($placeHolder, $console, $file) {
+                    if (!$console->fileIsExist($provider)) {
+                        $this->setValidationFailedText("Class {$provider} must be exist");
+                        return false;
+                    }
 
-        $filePath = $manager->getComponentFilePath();
+                    return $provider !== $placeHolder;
+                })
+                ->ask();
 
-        $stub = $file->get($manager->getComponentFileStub());
+            $providerOption = $result->fetch();
 
-        if ($this->forceTriggered($file, $filePath)) {
-            if (! $file->isDirectory(dirname($filePath))) {
-                $file->makeDirectory(dirname($filePath), 0655, true, true);
+            if (strlen($providerOption) > 0 && $providerOption !== $placeHolder) {
+                $console->makeComponentFile($menu, $file, $result->fetch());
             }
-    
-            $file->put($filePath, $stub);
-    
-            $this->line('Component file successfully created!');
-        }
+        };
+
+        $menu = ($builder = new CliMenuBuilder)
+            ->setWidth($builder->getTerminal()->getWidth() - 2 * 2)
+            ->setMarginAuto()
+            ->setPadding(2, 4)
+            ->setTitle('Component File Generator')
+            ->setTitleSeparator('=')
+            ->setBackgroundColour('166')
+            ->setForegroundColour('254')
+            ->setExitButtonText("Leave console")
+            ->setUnselectedMarker('❅ ')
+            ->setSelectedMarker('> ')
+            ->addItem('Create component file', $itemCallable)
+            ->build();
+
+        $menu->open();
     }
 
     /**
@@ -68,73 +96,74 @@ class ComponentGenerator extends Command
      */
     private function fileIsExist(string $provider): bool
     {
-        if (\class_exists($provider)) {
-            return true;
-        }
-
-        $this->error("class {$provider} must be exist");
-
-        return false;
+        return class_exists($provider) ? true : false;
     }
 
     /**
-     * Provider passed is registered provider.
+     * Generate component file.
      *
-     * @param Application $app
+     * @param CliMenu $menu
+     * @param Filesystem $file
      * @param string $providerOption
      *
-     * @return bool
+     * @return void
      */
-    private function isServiceProvider(Application $app, string $providerOption = null)
+    private function makeComponentFile(CliMenu $menu, Filesystem $file, string $providerOption)
     {
-        if (! $this->fileIsExist($providerOption)) {
-            return false;
+        $provider = new ReflectionClass($providerOption);
+
+        $manager = new Manager($provider);
+
+        $filePath = $manager->getComponentFilePath();
+
+        $stub = $file->get($manager->getComponentFileStub());
+
+        $successStyle = (new MenuStyle)
+            ->setBg('254')
+            ->setFg('166');
+
+        if ($file->exists($filePath)) {
+            $result = $menu->askText($successStyle)
+                ->setPromptText("Component file {$filePath} already exists!. Want to overwrite?")
+                ->setPlaceholderText(' Y / N ')
+                ->setValidationFailedText('Please choose either Y / N')
+                ->setValidator(function ($force) {
+                    return in_array(strtolower($force), ['y', 'n']);
+                })->ask();
+
+            $force = $result->fetch();
+
+            if (strtolower($force) === strtolower('N')) {
+                $menu->confirm('Component file are remained same!!!', $successStyle)->display('OK!');
+            } elseif (strtolower($force) === strtolower('Y')) {
+                $file->copy($filePath, \str_replace('component.php', date('dmyHis') . '.php', $filePath));
+
+                $this->copyStubToLocation($file, $filePath, $stub);
+
+                $menu->confirm('Component file successfully overwritten!!!', $successStyle)->display('OK!');
+            }
+        } else {
+            $this->copyStubToLocation($file, $filePath, $stub);
+
+            $menu->confirm('Component file successfully created!!!', $successStyle)->display('OK!');
         }
-
-        $provider = Arr::first($app->getProviders($providerOption));
-
-        if ($provider === null) {
-            $this->error("class {$providerOption} must be instance of ". ServiceProvider::class);
-
-            return false;
-        }
-
-        return $provider;
     }
 
     /**
-     * Process if --force indicator is used.
+     * Copy stubs to location.
      *
      * @param Filesystem $file
      * @param string $filePath
+     * @param $stub
      *
-     * @return bool
+     * @return void
      */
-    private function forceTriggered(Filesystem $file, string $filePath): bool
+    private function copyStubToLocation(Filesystem $file, string $filePath, $stub)
     {
-        if (! $this->option('force') && $file->exists($filePath)) {
-            $this->error(
-                'Component file already exists!. Please use --force or -f to re-create component file'
-            );
-
-            return false;
+        if (!$file->isDirectory(dirname($filePath))) {
+            $file->makeDirectory(dirname($filePath), 0655, true, true);
         }
 
-        if ($this->option('force') && $file->exists($filePath)) {
-            $force = $this->choice(
-                'This will replace current component file. Do you wish to continoue?',
-                [ 'Y', "N"]
-            );
-
-            if ($force === 'N') {
-                $this->line('Component file are remained same!!!');
-
-                return false;
-            } else {
-                $file->copy($filePath, \str_replace('component.php', date('dmyHis') . '.php', $filePath));
-            }
-        }
-
-        return true;
+        $file->put($filePath, $stub);
     }
 }
