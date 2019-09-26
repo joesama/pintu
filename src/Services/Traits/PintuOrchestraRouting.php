@@ -19,12 +19,6 @@ trait PintuOrchestraRouting
     {
         $router = $this->app->make(Router::class);
 
-        $provider = new ReflectionClass(__CLASS__);
-
-        $properties = $provider->getDefaultProperties();
-
-        $namespace = $properties['namespace'];
-
-        RoutingServices::router($provider, $router, $namespace);
+        RoutingServices::router(__CLASS__, $router);
     }
 }

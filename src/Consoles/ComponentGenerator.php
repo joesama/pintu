@@ -3,18 +3,12 @@
 namespace Joesama\Pintu\Consoles;
 
 use ReflectionClass;
-use Illuminate\Support\Arr;
 use PhpSchool\CliMenu\CliMenu;
 use Illuminate\Console\Command;
 use PhpSchool\CliMenu\MenuStyle;
-use PhpSchool\CliMenu\Input\Text;
-use PhpSchool\CliMenu\Input\InputIO;
 use Illuminate\Filesystem\Filesystem;
 use Joesama\Pintu\Components\Manager;
-use Illuminate\Support\ServiceProvider;
-use PhpSchool\CliMenu\Action\GoBackAction;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
-use Illuminate\Contracts\Foundation\Application;
 
 class ComponentGenerator extends Command
 {
@@ -38,7 +32,7 @@ class ComponentGenerator extends Command
      *
      * @return mixed
      */
-    public function handle(Application $app, Filesystem $file)
+    public function handle(Filesystem $file)
     {
         $placeHolder = 'Joesama\\Pintu\\PintuProvider';
 

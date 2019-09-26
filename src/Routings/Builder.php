@@ -4,8 +4,8 @@ namespace Joesama\Pintu\Routings;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
+use Illuminate\Routing\Router;
 use Joesama\Pintu\Routings\Concerns\Grammar;
 
 class Builder

@@ -21,9 +21,11 @@ class ComponentServices implements Arrayable
      *
      * @param array $provider
      */
-    public function __construct(ReflectionClass $providerReflection)
+    public function __construct(string $providerNameSpace)
     {
-        $this->manager = new Manager($providerReflection);
+        $provider = new ReflectionClass($providerNameSpace);
+
+        $this->manager = new Manager($provider);
     }
 
     /**

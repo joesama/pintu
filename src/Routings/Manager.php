@@ -4,16 +4,15 @@ namespace Joesama\Pintu\Routings;
 
 use Illuminate\Support\Arr;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Collection;
 use Joesama\Pintu\Routings\Builder;
-use Joesama\Pintu\Components\Manager as Component;
+use Joesama\Pintu\Components\Manager as ComponentManager;
 
 class Manager
 {
     /**
      * Collection of API definition.
      *
-     * @var Component
+     * @var ComponentManager
      */
     private $component;
 
@@ -27,9 +26,9 @@ class Manager
     /**
      * Initialize routes manager.
      *
-     * @param Component $component
+     * @param ComponentManager $component
      */
-    public function __construct(Component $component)
+    public function __construct(ComponentManager $component)
     {
         $this->component = $component;
     }

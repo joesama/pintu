@@ -23,7 +23,7 @@ class ComponentBuilderTest extends TestCase
     {
         $this->router = $app->make(Router::class);
 
-        $this->testNameSpace = new ReflectionClass(PintuProvider::class);
+        $this->testNameSpace = PintuProvider::class;
     }
 
     /**
