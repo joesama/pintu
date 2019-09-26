@@ -1,11 +1,15 @@
 <?php
+
 namespace Joesama\Pintu;
 
 use Illuminate\Support\ServiceProvider;
 use Joesama\Pintu\Consoles\ComponentGenerator;
+use Joesama\Pintu\Services\Traits\PintuLaravelRouting;
 
 class PintuProvider extends ServiceProvider
 {
+    use PintuLaravelRouting;
+
     /**
      * List all registered commands.
      *
@@ -22,6 +26,8 @@ class PintuProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->registerComponentRouting();
+
         $this->commands($this->console);
     }
 }

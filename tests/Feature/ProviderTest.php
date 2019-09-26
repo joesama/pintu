@@ -1,4 +1,5 @@
 <?php
+
 namespace Tests;
 
 use Joesama\Pintu\PintuProvider;
@@ -9,14 +10,14 @@ class ProviderTest extends TestCase
 {
     protected function getPackageProviders($app)
     {
-        return [PintuProvider::class];
+        return [
+            PintuProvider::class
+        ];
     }
 
     /** @test */
     public function testServiceProvider()
     {
-        $this->assertClassHasAttribute('defer', PintuProvider::class);
-
-        app()->resolveProvider(PintuProvider::class)->commands([ComponentGenerator::class]);
+        $this->assertClassHasAttribute('console', PintuProvider::class);
     }
 }

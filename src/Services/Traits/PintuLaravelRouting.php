@@ -6,16 +6,14 @@ use ReflectionClass;
 use Illuminate\Routing\Router;
 use Joesama\Pintu\Services\RoutingServices;
 
-trait PintuOrchestraRouting
+trait PintuLaravelRouting
 {
     /**
-     * Build route generator callback.
+     * Boot the pintu routing component.
      *
-     * @param  string  $path
-     *
-     * @return \Closure
+     * @return void
      */
-    protected function loadRoutes()
+    public function registerComponentRouting()
     {
         RoutingServices::router(__CLASS__, $this->app['router']);
     }
