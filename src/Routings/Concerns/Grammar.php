@@ -84,18 +84,19 @@ trait Grammar
     /**
      * Router name naming convention.
      *
+     * @param string $type
      * @param string $controller
      * @param string $function
      * @param array $attributes
      *
      * @return string
      */
-    protected function namedConvention(string $controller, string $function, array $attributes): string
+    protected function namedConvention(string $type, string $controller, string $function, array $attributes): string
     {
         $named = Arr::get($attributes, 'named', null);
 
         if ($named === '' || $named === null) {
-            $named = $controller . '.' . $function;
+            $named = Str::lower($controller . '.' . $type . '.' . $function);
         }
 
         return Str::lower($named);

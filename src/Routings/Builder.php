@@ -45,16 +45,29 @@ class Builder
      */
     public function componentRouting(Collection $components, string $namespace)
     {
-        $components->each(function ($component, $controller) use ($namespace) {
-            collect($component)->each(function ($attributes, $function) use ($controller, $namespace) {
-                $this->router->group(['namespace' => $namespace, 'prefix' => $controller], function (Router $router) use ($controller, $function, $attributes) {
+        $options = [
+            'namespace' => $namespace,
+            'middleware' => ['web']
+        ];
+
+        $components->each(function ($component, $controller) use ($options) {
+            collect($component)->each(function ($attributes, $function) use ($controller, $options) {
+                $options = Arr::set($options, 'prefix', $controller);
+
+                if (Arr::get($attributes, 'auth', false)) {
+                    $middleware = Arr::get($options, 'middleware');
+
+                    $options = Arr::set($options, 'middleware', array_merge(Arr::wrap($middleware), ['auth']));
+                }
+
+                $this->router->group($options, function (Router $router) use ($controller, $function, $attributes) {
                     collect($this->componentMethods)->each(function ($type) use ($router, $controller, $function, $attributes) {
                         $router->addRoute(
                             Str::upper($type),
                             $this->pathConvention($type, $function, $attributes),
                             $this->classConvention($type, $controller, $function)
-                        )->named(
-                            $this->namedConvention($controller, $function, $attributes)
+                        )->name(
+                            $this->namedConvention($type, $controller, $function, $attributes)
                         );
                     });
                 });
@@ -71,7 +84,13 @@ class Builder
      */
     public function apiRouting(Collection $apis, string $namespace)
     {
-        $this->router->group(['namespace' => $namespace, 'prefix' => 'api'], function (Router $router) use ($apis) {
+        $options = [
+            'namespace' => $namespace,
+            'prefix' => 'api',
+            'middleware' => ['auth:api']
+        ];
+
+        $this->router->group($options, function (Router $router) use ($apis) {
             $apis->each(function ($routes, $method) use ($router) {
                 if (!empty($routes)) {
                     list($path, $controller, $named) = Arr::first($routes);
@@ -80,7 +99,7 @@ class Builder
                         Str::upper($method),
                         $path,
                         Str::ucfirst($controller)
-                    )->named(
+                    )->name(
                         'api.' . $named
                     );
                 }
