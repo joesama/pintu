@@ -12,7 +12,6 @@ use PhpSchool\CliMenu\Builder\CliMenuBuilder;
 
 class ComponentGenerator extends Command
 {
-    private $serviceProvider;
     /**
      * The name and signature of the console command.
      *

@@ -45,6 +45,6 @@ class RoutingBuilderTest extends TestCase
 
         RoutingServices::router(PintuProvider::class, $this->router);
 
-        $this->assertNotEquals(0, $this->router->getRoutes()->count());
+        $this->assertEquals(0, $this->router->getRoutes()->count());
     }
 }

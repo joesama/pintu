@@ -48,27 +48,16 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v1
 
-    - name: Show files
-      run: |
-        ls -la
-
-    - name: Get Path
-      run: |
-        pwd
-
     - name: Run composer install
       run: |
         composer install -vvv --profile --prefer-dist --dev
 
-    - name: Install PHPInsight
-      run: |
-        composer require nunomaduro/phpinsights -vvv --profile
-
-    - name: PHPInsight
-      run: |
-        /vendor/bin/phpinsights -v --min-quality=80 --min-complexity=80 --min-architecture=80 --min-style=80
-
-    - name: PHP-CS-Fixer
-      uses: docker://oskarstark/php-cs-fixer-ga
+    - name: OSKAR-phpstan
+      uses: OskarStark/phpstan-ga@0.11.16
+      with:
+        args: analyse src/
+        
+    - name: OSKAR-PHP-CS-Fixer
+      uses: OskarStark/php-cs-fixer-ga@2.15.3
       with:
         args: --config=.project.php_cs --diff --dry-run
