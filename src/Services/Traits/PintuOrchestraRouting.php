@@ -2,8 +2,6 @@
 
 namespace Joesama\Pintu\Services\Traits;
 
-use ReflectionClass;
-use Illuminate\Routing\Router;
 use Joesama\Pintu\Services\RoutingServices;
 
 trait PintuOrchestraRouting
