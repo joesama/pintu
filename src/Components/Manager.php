@@ -41,7 +41,7 @@ class Manager
     /**
      * Initiate Component Manager.
      *
-     * @param array $component
+     * @param ReflectionClass $providerReflection
      */
     public function __construct(ReflectionClass $providerReflection)
     {

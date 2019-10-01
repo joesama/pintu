@@ -46,7 +46,7 @@ class ComponentGenerator extends Command
                 ->setPromptText('Type service provider namespace. [esc] to exit')
                 ->setPlaceholderText($placeHolder)
                 ->setValidationFailedText('Please type full qualified service provider namespace')
-                ->setValidator(function ($provider) use ($placeHolder, $console, $file) {
+                ->setValidator(function ($provider) use ($placeHolder, $console) {
                     if (!$console->fileIsExist($provider)) {
                         $this->setValidationFailedText("Class {$provider} must be exist");
                         return false;

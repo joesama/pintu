@@ -51,13 +51,3 @@ jobs:
     - name: Run composer install
       run: |
         composer install -vvv --profile --prefer-dist --dev
-
-    - name: OSKAR-phpstan
-      uses: OskarStark/phpstan-ga@0.11.16
-      with:
-        args: analyse src/
-        
-    - name: OSKAR-PHP-CS-Fixer
-      uses: OskarStark/php-cs-fixer-ga@2.15.3
-      with:
-        args: --config=.project.php_cs --diff --dry-run
