@@ -7,7 +7,7 @@ php:
 
 env:
   global:
-    - coverage=no
+    - coverage=yes
   matrix:
     - setup=basic
     - setup=lowest
