@@ -59,7 +59,12 @@ class Manager
         $this->namespace = $namespace;
     }
 
-    protected function getComponentNameSpace()
+    /**
+     * Get component controller namespace.
+     *
+     * @return string
+     */
+    public function getComponentNameSpace(): string
     {
         if ($this->namespace === null) {
             return Arr::get($this->component->getComponentNameSpace(), 'component');
@@ -68,7 +73,12 @@ class Manager
         return $this->namespace;
     }
 
-    protected function getApiNameSpace()
+    /**
+     * Get API controller namespace.
+     *
+     * @return string
+     */
+    public function getApiNameSpace(): string
     {
         if ($this->namespace === null) {
             return Arr::get($this->component->getComponentNameSpace(), 'api');

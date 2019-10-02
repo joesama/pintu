@@ -10,12 +10,13 @@ trait Grammar
     /**
      * Path naming convention definition.
      *
+     * @param string $type
      * @param string $function
      * @param array $attributes
      *
      * @return string
      */
-    protected function pathConvention(string $type, string $function, array $attributes): string
+    public function pathConvention(string $type, string $function, array $attributes): string
     {
         $keymap = $this->keymapIsString(Arr::get($attributes, 'keymap'));
 
@@ -76,7 +77,7 @@ trait Grammar
      *
      * @return string
      */
-    protected function classConvention(string $type, string $controller, string $function): string
+    public function classConvention(string $type, string $controller, string $function): string
     {
         return Str::ucfirst($controller) . 'Controller@' . Str::camel(Str::lower($type) . '_' . $function);
     }
@@ -91,12 +92,12 @@ trait Grammar
      *
      * @return string
      */
-    protected function namedConvention(string $type, string $controller, string $function, array $attributes): string
+    public function namedConvention(string $type, string $controller, string $function, array $attributes): string
     {
         $named = Arr::get($attributes, 'named', null);
 
         if ($named === '' || $named === null) {
-            $named = Str::lower($controller . '.' . $type . '.' . $function);
+            $named = Str::lower($controller . '.' . $type . '.l' . $function);
         }
 
         return Str::lower($named);

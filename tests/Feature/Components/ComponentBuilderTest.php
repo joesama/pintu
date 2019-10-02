@@ -2,10 +2,12 @@
 
 namespace Tests\Feature\Components;
 
+use Exception;
 use ReflectionClass;
 use Illuminate\Routing\Router;
 use Joesama\Pintu\PintuProvider;
 use Orchestra\Testbench\TestCase;
+use Joesama\Pintu\Components\Manager;
 use Illuminate\Contracts\Support\Arrayable;
 use Joesama\Pintu\Services\ComponentServices;
 
@@ -28,13 +30,34 @@ class ComponentBuilderTest extends TestCase
 
     /**
      * @test
-     * @testdox  Validate the class builder exist
+     * @testdox  Validate the component service without service provider.
      */
-    public function theComponentServicesIsExist()
+    public function theComponentServicesWithNonServiceProvider()
     {
-        $file = realpath(__DIR__ . '/../../../src/Services/ComponentServices.php');
+        $this->expectException(Exception::class);
 
-        $this->assertFileExists($file);
+        $componentServices = new ComponentServices(Router::class);
+
+        $componentpath = $componentServices->getComponentFilePath();
+    }
+
+    /**
+     * @test
+     * @testdox  Validate component file path and stub.
+     */
+    public function theComponentFilePathAndStub()
+    {
+        $provider = new ReflectionClass($this->testNameSpace);
+
+        $componentManger = new Manager($provider);
+
+        $componentPath = $componentManger->getComponentFilePath();
+
+        $componentStub = $componentManger->getComponentFileStub();
+
+        $this->assertIsString($componentPath);
+
+        $this->assertIsString($componentStub);
     }
 
     /**
