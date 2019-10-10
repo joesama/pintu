@@ -97,9 +97,16 @@ trait Grammar
         $named = Arr::get($attributes, 'named', null);
 
         if ($named === '' || $named === null) {
-            $named = Str::lower($controller . '.' . $type . '.l' . $function);
+            $named = Str::lower($controller . '.' . $function);
         }
 
-        return Str::lower($named);
+        if (\is_string($named)) {
+            return Str::lower($type . '.' . $named);
+        }
+        $type = Str::lower($type);
+
+        $names = array_change_key_case($named, \CASE_LOWER);
+
+        return Str::lower(collect($names)->get($type));
     }
 }
