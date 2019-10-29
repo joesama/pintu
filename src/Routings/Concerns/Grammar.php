@@ -46,11 +46,11 @@ trait Grammar
      */
     private function keymapIsString($keymap): array
     {
-        if (\is_string($keymap) && Str::length($keymap) > 0) {
-            return [$keymap];
+        if (\is_string($keymap)) {
+            return (Str::length($keymap) > 0) ? Arr::wrap($keymap) : [];
         }
 
-        return [];
+        return $keymap;
     }
 
     /**
@@ -111,6 +111,10 @@ trait Grammar
 
         $names = array_change_key_case($named, \CASE_LOWER);
 
-        return Str::lower(collect($names)->get($type)) ?? Str::lower($type . '.' . $controller . '.' . $function);
+        if (collect($names)->has($type)) {
+            return Str::lower(collect($names)->get($type, \null));
+        } else {
+            return Str::lower($type . '.' . $controller . '.' . $function);
+        }
     }
 }
