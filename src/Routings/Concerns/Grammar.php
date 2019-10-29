@@ -25,7 +25,11 @@ trait Grammar
         if (!\is_array($keymap) || empty($keymap)) {
             return $function;
         } else {
-            $keymap = collect($keymap)->map(function ($id) {
+            $keymap = collect($keymap)->map(function ($id, $key) use ($type) {
+                if (!is_int($key) && strtolower($key) === strtolower($type)) {
+                    return null;
+                }
+
                 return '{' . $id . '}';
             })->implode('/');
 
@@ -107,6 +111,6 @@ trait Grammar
 
         $names = array_change_key_case($named, \CASE_LOWER);
 
-        return Str::lower(collect($names)->get($type));
+        return Str::lower(collect($names)->get($type)) ?? Str::lower($type . '.' . $controller . '.' . $function);
     }
 }
