@@ -20,8 +20,6 @@ trait Grammar
     {
         $keymap = $this->keymapIsString(Arr::get($attributes, 'keymap'));
 
-        $keymap = $this->appendIdParameter($keymap);
-
         if (!\is_array($keymap) || empty($keymap)) {
             return $function;
         } else {
