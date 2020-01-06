@@ -20,17 +20,15 @@ trait Grammar
     {
         $keymap = $this->keymapIsString(Arr::get($attributes, 'keymap'));
 
-        $keymap = $this->appendIdParameter($keymap);
-
         if (!\is_array($keymap) || empty($keymap)) {
             return $function;
         } else {
             $keymap = collect($keymap)->map(function ($id, $key) use ($type) {
                 if (!is_int($key) && strtolower($key) === strtolower($type)) {
-                    return null;
+                    return '{' . $id . '}';
                 }
 
-                return '{' . $id . '}';
+                return null;
             })->implode('/');
 
             return $function . '/' . $keymap;
