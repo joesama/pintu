@@ -27,10 +27,10 @@ trait Grammar
         } else {
             $keymap = collect($keymap)->map(function ($id, $key) use ($type) {
                 if (!is_int($key) && strtolower($key) === strtolower($type)) {
-                    return null;
+                    return '{' . $id . '}';
                 }
 
-                return '{' . $id . '}';
+                return null;
             })->implode('/');
 
             return $function . '/' . $keymap;
