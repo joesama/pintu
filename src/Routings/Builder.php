@@ -60,6 +60,13 @@ class Builder
                     $options = Arr::set($options, 'middleware', array_merge(Arr::wrap($middleware), ['auth']));
                 }
 
+                $only = Arr::get($attributes, 'only', collect($this->componentMethods)->toArray());
+
+                $this->componentMethods = collect($this->componentMethods)->filter(function ($item) use ($only) {
+
+                    return \in_array($item, \array_flip(\array_change_key_case(\array_flip($only), \CASE_UPPER)));
+                });
+
                 $this->router->group($options, function (Router $router) use ($controller, $function, $attributes) {
                     collect($this->componentMethods)->each(function ($type) use ($router, $controller, $function, $attributes) {
                         $router->addRoute(
