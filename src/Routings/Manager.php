@@ -44,6 +44,10 @@ class Manager
 
         $builder->componentRouting($this->component->getComponent(), $this->getComponentNameSpace());
 
+        if ($this->component->getLanding()) {
+            $builder->landingRouting($this->getComponentNameSpace());
+        }
+
         $builder->apiRouting($this->component->getApi(), $this->getApiNameSpace());
     }
 

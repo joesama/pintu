@@ -82,6 +82,36 @@ class Builder
     }
 
     /**
+     * Landing routing registration.
+     *
+     * @param Collection $component
+     *
+     * @return void
+     */
+    public function landingRouting(string $namespace)
+    {
+        $options = [
+            'namespace' => $namespace,
+            'middleware' => ['web', 'guest']
+        ];
+
+        $type = 'GET';
+        $controller = 'landing';
+        $function = 'default';
+        $attributes = [];
+
+        $this->router->group($options, function (Router $router) use ($type, $controller, $function, $attributes) {
+            $router->addRoute(
+                Str::upper($type),
+                '/',
+                $this->classConvention($type, $controller, $function)
+            )->name(
+                $controller
+            );
+        });
+    }
+
+    /**
      * API routing registration.
      *
      * @param Collection $api

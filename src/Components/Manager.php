@@ -60,6 +60,16 @@ class Manager
     }
 
     /**
+     * Return landing .
+     *
+     * @return bool
+     */
+    public function getLanding(): bool
+    {
+        return $this->component->get('landing', false);
+    }
+
+    /**
      * Return component collection.
      *
      * @return Collection
