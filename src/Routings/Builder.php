@@ -62,13 +62,12 @@ class Builder
 
                 $only = Arr::get($attributes, 'only', collect($this->componentMethods)->toArray());
 
-                $this->componentMethods = collect($this->componentMethods)->filter(function ($item) use ($only) {
-
+                $componentMethods = collect($this->componentMethods)->filter(function ($item) use ($only) {
                     return \in_array($item, \array_flip(\array_change_key_case(\array_flip($only), \CASE_UPPER)));
                 });
 
-                $this->router->group($options, function (Router $router) use ($controller, $function, $attributes) {
-                    collect($this->componentMethods)->each(function ($type) use ($router, $controller, $function, $attributes) {
+                $this->router->group($options, function (Router $router) use ($componentMethods, $controller, $function, $attributes) {
+                    $componentMethods->each(function ($type) use ($router, $controller, $function, $attributes) {
                         $router->addRoute(
                             Str::upper($type),
                             $this->pathConvention($type, $function, $attributes),
