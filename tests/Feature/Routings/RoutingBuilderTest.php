@@ -89,6 +89,188 @@ class RoutingBuilderTest extends TestCase
     /**
      *
      * @test
+     * @testdox  Validate builder naming % path convention with keymap empty array.
+     *
+     */
+    public function theBuilderShouldUseGrammarPathConventionEmptyArray()
+    {
+        $builder = mock::mock(Builder::class, [$this->router]);
+
+        $type = 'type';
+
+        $controller = 'controller';
+
+        $function = 'function';
+
+        // pathConvention test with empty array
+        $pathConventionExpected = $function;
+
+        $builder->shouldReceive('pathConvention')
+            ->with($type, $function, [])
+            ->andReturn($pathConventionExpected);
+
+        $this->assertIsString($builder->pathConvention($type, $function, []));
+
+        $this->assertEquals($pathConventionExpected, $builder->pathConvention($type, $function, []));
+    }
+
+    /**
+     *
+     * @test
+     * @testdox  Validate builder naming % path convention with keymap id referrencing.
+     *
+     */
+    public function theBuilderShouldUseGrammarPathConventionKeymapWithId()
+    {
+        $builder = mock::mock(Builder::class, [$this->router]);
+
+        $type = 'type';
+
+        $controller = 'controller';
+
+        $function = 'function';
+
+        // pathConvention test with keymap with id referrencing
+        $pathConventionKeymapIdMappedExpected = $function . '/{id}';
+
+        $keymap = ['keymap' => [
+            $type => 'id'
+        ]];
+
+        $builder->shouldReceive('pathConvention')
+            ->with($type, $function, $keymap)
+            ->andReturn($pathConventionKeymapIdMappedExpected);
+
+        $path = $builder->pathConvention($type, $function, $keymap);
+
+        $this->assertIsString($path);
+
+        $this->assertEquals(
+            $pathConventionKeymapIdMappedExpected,
+            $path
+        );
+    }
+
+    /**
+     *
+     * @test
+     * @testdox  Validate builder naming % path convention with empty array keymap.
+     *
+     */
+    public function theBuilderShouldUseGrammarPathConventionKeymapWithEmptyArray()
+    {
+        $builder = mock::mock(Builder::class, [$this->router]);
+
+        $type = 'type';
+
+        $controller = 'controller';
+
+        $function = 'function';
+
+        // pathConvention test with keymap with empty array 
+        $pathConventionKeymapEmptyArrayExpected = $function;
+
+        $keymap = ['keymap' => []];
+
+        $builder->shouldReceive('pathConvention')
+            ->with($type, $function, $keymap)
+            ->andReturn($pathConventionKeymapEmptyArrayExpected);
+
+        $this->assertIsString($builder->pathConvention($type, $function, $keymap));
+
+        $this->assertEquals(
+            $pathConventionKeymapEmptyArrayExpected,
+            $builder->pathConvention($type, $function, $keymap)
+        );
+    }
+
+    /**
+     *
+     * @test
+     * @testdox  Validate builder naming % path convention with string keymap.
+     *
+     */
+    public function theBuilderShouldUseGrammarPathConventionKeymapWithString()
+    {
+        $builder = mock::mock(Builder::class, [$this->router]);
+
+        $type = 'type';
+
+        $controller = 'controller';
+
+        $function = 'function';
+
+        // pathConvention test with string keymap
+        $pathConventionKeymapExpected = $function . '/{id_name}';
+
+        $keymap = ['keymap' => 'id_name'];
+
+        $builder->shouldReceive('pathConvention')
+            ->with($type, $function, $keymap)
+            ->andReturn($pathConventionKeymapExpected);
+
+        $this->assertIsString($builder->pathConvention($type, $function, $keymap));
+
+        $this->assertEquals($pathConventionKeymapExpected, $builder->pathConvention($type, $function, $keymap));
+    }
+
+    /**
+     *
+     * @test
+     * @testdox  Validate builder naming % class convention .
+     *
+     */
+    public function theBuilderShouldUseGrammarClassConvention()
+    {
+        $builder = mock::mock(Builder::class, [$this->router]);
+
+        $type = 'type';
+
+        $controller = 'controller';
+
+        $function = 'function';
+        // classConvention test
+        $classConventionExpected = Str::ucfirst($controller) . 'Controller@' . Str::camel(Str::lower($type) . '_' . $function);
+
+        $builder->shouldReceive('classConvention')
+            ->with($type, $controller, $function)
+            ->andReturn($classConventionExpected);
+
+        $this->assertIsString($builder->classConvention($type, $controller, $function));
+
+        $this->assertEquals($classConventionExpected, $builder->classConvention($type, $controller, $function));
+    }
+
+    /**
+     *
+     * @test
+     * @testdox  Validate builder naming % name convention .
+     *
+     */
+    public function theBuilderShouldUseGrammarNamedConvention()
+    {
+        $builder = mock::mock(Builder::class, [$this->router]);
+
+        $type = 'type';
+
+        $controller = 'controller';
+
+        $function = 'function';
+        // namedConvention test
+        $namedConventionExpected = Str::lower($controller . '.' . $type . '.' . $function);
+
+        $builder->shouldReceive('namedConvention')
+            ->with($type, $controller, $function, [])
+            ->andReturn($namedConventionExpected);
+
+        $this->assertIsString($builder->namedConvention($type, $controller, $function, []));
+
+        $this->assertEquals($namedConventionExpected, $builder->namedConvention($type, $controller, $function, []));
+    }
+
+    /**
+     *
+     * @test
      * @testdox  Validate builder naming % path convention working fine.
      *
      */
@@ -102,6 +284,7 @@ class RoutingBuilderTest extends TestCase
 
         $function = 'function';
 
+        // pathConvention test with empty array
         $pathConventionExpected = $function;
 
         $builder->shouldReceive('pathConvention')
@@ -112,6 +295,25 @@ class RoutingBuilderTest extends TestCase
 
         $this->assertEquals($pathConventionExpected, $builder->pathConvention($type, $function, []));
 
+        // pathConvention test with keymap with empty array 
+        $pathConventionKeymapIdMappedExpected = $function . '/{id}';
+
+        $keymap = ['keymap' => [
+            $type => 'id'
+        ]];
+
+        $builder->shouldReceive('pathConvention')
+            ->with($type, $function, $keymap)
+            ->andReturn($pathConventionKeymapIdMappedExpected);
+
+        $this->assertIsString($builder->pathConvention($type, $function, $keymap));
+
+        $this->assertEquals(
+            $pathConventionKeymapIdMappedExpected,
+            $builder->pathConvention($type, $function, $keymap)
+        );
+
+        // pathConvention test with keymap with empty array 
         $pathConventionKeymapEmptyArrayExpected = $function;
 
         $keymap = ['keymap' => []];
@@ -127,6 +329,7 @@ class RoutingBuilderTest extends TestCase
             $builder->pathConvention($type, $function, $keymap)
         );
 
+        // pathConvention test with string keymap
         $pathConventionKeymapExpected = $function . '/{id_name}';
 
         $keymap = ['keymap' => 'id_name'];
@@ -139,6 +342,7 @@ class RoutingBuilderTest extends TestCase
 
         $this->assertEquals($pathConventionKeymapExpected, $builder->pathConvention($type, $function, $keymap));
 
+        // classConvention test
         $classConventionExpected = Str::ucfirst($controller) . 'Controller@' . Str::camel(Str::lower($type) . '_' . $function);
 
         $builder->shouldReceive('classConvention')
@@ -149,6 +353,7 @@ class RoutingBuilderTest extends TestCase
 
         $this->assertEquals($classConventionExpected, $builder->classConvention($type, $controller, $function));
 
+        // namedConvention test
         $namedConventionExpected = Str::lower($controller . '.' . $type . '.' . $function);
 
         $builder->shouldReceive('namedConvention')
@@ -159,6 +364,7 @@ class RoutingBuilderTest extends TestCase
 
         $this->assertEquals($namedConventionExpected, $builder->namedConvention($type, $controller, $function, []));
     }
+
 
     /**
      *
