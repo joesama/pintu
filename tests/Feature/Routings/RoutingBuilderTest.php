@@ -247,4 +247,30 @@ class RoutingBuilderTest extends TestCase
 
         $this->assertCount(5, $this->router->getRoutes());
     }
+
+    /**
+     *
+     * @test
+     * @testdox Register Landing Routing.
+     * @return void
+     *
+     */
+    public function theBuilderCanRegisterLandingRouting()
+    {
+        $builder = mock::mock(Builder::class, [$this->router])->makePartial();
+
+        $namespace = 'namespace';
+
+        $builder->shouldReceive('landingRouting')
+            ->with($namespace)
+            ->once();
+
+        $builder->landingRouting($namespace);
+
+        $build = new Builder($this->router);
+
+        $build->landingRouting($namespace);
+
+        $this->assertCount(1, $this->router->getRoutes());
+    }
 }
