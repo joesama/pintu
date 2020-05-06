@@ -5,19 +5,19 @@ build:
                 override:
                     - php-scrutinizer-run
         coverage:
-            tests:
-                override:
-                    - command: vendor/bin/phpunit tests/  --configuration ./phpunit.xml --coverage-clover clover.xml
-                        coverage:
-                            file: clover.xml
-                            format: clover
+          tests:
+            override:
+              - command: vendor/bin/phpunit tests/  --configuration ./phpunit.xml --coverage-clover clover.xml
+                coverage:
+                  file: clover.xml
+                  format: clover
 before_commands:
+    - 'composer clearcache'
     - 'composer install --prefer-dist --no-interaction'
 filter:
     paths:
         - 'src/*'
     excluded_paths:
-        - 'build/*'
         - 'vendor/*'
         - 'tests/*'
 tools:
