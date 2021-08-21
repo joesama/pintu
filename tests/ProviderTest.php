@@ -1,17 +1,17 @@
 <?php
 
-namespace Tests;
+namespace Joesama\Pintu\Tests;
 
+use Joesama\Pintu\Consoles\ComponentGenerator;
 use Joesama\Pintu\PintuProvider;
 use Orchestra\Testbench\TestCase;
-use Joesama\Pintu\Consoles\ComponentGenerator;
 
 class ProviderTest extends TestCase
 {
     protected function getPackageProviders($app)
     {
         return [
-            PintuProvider::class
+            PintuProvider::class,
         ];
     }
 

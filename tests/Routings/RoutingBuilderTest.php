@@ -1,18 +1,18 @@
 <?php
 
-namespace Tests\Feature\Routings;
+namespace Joesama\Pintu\Tests\Feature\Routings;
 
-use Mockery as mock;
-use ReflectionClass;
-use Illuminate\Support\Str;
 use Illuminate\Routing\Router;
-use Joesama\Pintu\PintuProvider;
-use Orchestra\Testbench\TestCase;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Joesama\Pintu\Components\Manager as ComponentManager;
+use Joesama\Pintu\PintuProvider;
 use Joesama\Pintu\Routings\Builder;
 use Joesama\Pintu\Routings\Manager;
 use Joesama\Pintu\Services\RoutingServices;
-use Joesama\Pintu\Components\Manager as ComponentManager;
+use Mockery as mock;
+use Orchestra\Testbench\TestCase;
+use ReflectionClass;
 
 class RoutingBuilderTest extends TestCase
 {
@@ -25,6 +25,7 @@ class RoutingBuilderTest extends TestCase
      * Define environment setup.
      *
      * @param  \Illuminate\Foundation\Application  $app
+     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -58,10 +59,8 @@ class RoutingBuilderTest extends TestCase
     }
 
     /**
-     *
      * @test
      * @testdox  Validate routing manager.
-     *
      */
     public function theRoutingManagerShouldBuildTheRouting()
     {
@@ -87,10 +86,8 @@ class RoutingBuilderTest extends TestCase
     }
 
     /**
-     *
      * @test
      * @testdox  Validate builder naming % path convention with keymap empty array.
-     *
      */
     public function theBuilderShouldUseGrammarPathConventionEmptyArray()
     {
@@ -115,10 +112,8 @@ class RoutingBuilderTest extends TestCase
     }
 
     /**
-     *
      * @test
      * @testdox  Validate builder naming % path convention with keymap id referrencing.
-     *
      */
     public function theBuilderShouldUseGrammarPathConventionKeymapWithId()
     {
@@ -131,10 +126,10 @@ class RoutingBuilderTest extends TestCase
         $function = 'function';
 
         // pathConvention test with keymap with id referrencing
-        $pathConventionKeymapIdMappedExpected = $function . '/{id}';
+        $pathConventionKeymapIdMappedExpected = $function.'/{id}';
 
         $keymap = ['keymap' => [
-            $type => 'id'
+            $type => 'id',
         ]];
 
         $builder->shouldReceive('pathConvention')
@@ -152,10 +147,8 @@ class RoutingBuilderTest extends TestCase
     }
 
     /**
-     *
      * @test
      * @testdox  Validate builder naming % path convention with empty array keymap.
-     *
      */
     public function theBuilderShouldUseGrammarPathConventionKeymapWithEmptyArray()
     {
@@ -167,7 +160,7 @@ class RoutingBuilderTest extends TestCase
 
         $function = 'function';
 
-        // pathConvention test with keymap with empty array 
+        // pathConvention test with keymap with empty array
         $pathConventionKeymapEmptyArrayExpected = $function;
 
         $keymap = ['keymap' => []];
@@ -185,10 +178,8 @@ class RoutingBuilderTest extends TestCase
     }
 
     /**
-     *
      * @test
      * @testdox  Validate builder naming % path convention with string keymap.
-     *
      */
     public function theBuilderShouldUseGrammarPathConventionKeymapWithString()
     {
@@ -201,7 +192,7 @@ class RoutingBuilderTest extends TestCase
         $function = 'function';
 
         // pathConvention test with string keymap
-        $pathConventionKeymapExpected = $function . '/{id_name}';
+        $pathConventionKeymapExpected = $function.'/{id_name}';
 
         $keymap = ['keymap' => 'id_name'];
 
@@ -215,10 +206,8 @@ class RoutingBuilderTest extends TestCase
     }
 
     /**
-     *
      * @test
      * @testdox  Validate builder naming % class convention .
-     *
      */
     public function theBuilderShouldUseGrammarClassConvention()
     {
@@ -230,7 +219,7 @@ class RoutingBuilderTest extends TestCase
 
         $function = 'function';
         // classConvention test
-        $classConventionExpected = Str::ucfirst($controller) . 'Controller@' . Str::camel(Str::lower($type) . '_' . $function);
+        $classConventionExpected = Str::ucfirst($controller).'Controller@'.Str::camel(Str::lower($type).'_'.$function);
 
         $builder->shouldReceive('classConvention')
             ->with($type, $controller, $function)
@@ -242,10 +231,8 @@ class RoutingBuilderTest extends TestCase
     }
 
     /**
-     *
      * @test
      * @testdox  Validate builder naming % name convention .
-     *
      */
     public function theBuilderShouldUseGrammarNamedConvention()
     {
@@ -257,7 +244,7 @@ class RoutingBuilderTest extends TestCase
 
         $function = 'function';
         // namedConvention test
-        $namedConventionExpected = Str::lower($controller . '.' . $type . '.' . $function);
+        $namedConventionExpected = Str::lower($controller.'.'.$type.'.'.$function);
 
         $builder->shouldReceive('namedConvention')
             ->with($type, $controller, $function, [])
@@ -269,10 +256,8 @@ class RoutingBuilderTest extends TestCase
     }
 
     /**
-     *
      * @test
      * @testdox  Validate builder naming % path convention working fine.
-     *
      */
     public function theBuilderShouldUseGrammarConvention()
     {
@@ -295,11 +280,11 @@ class RoutingBuilderTest extends TestCase
 
         $this->assertEquals($pathConventionExpected, $builder->pathConvention($type, $function, []));
 
-        // pathConvention test with keymap with empty array 
-        $pathConventionKeymapIdMappedExpected = $function . '/{id}';
+        // pathConvention test with keymap with empty array
+        $pathConventionKeymapIdMappedExpected = $function.'/{id}';
 
         $keymap = ['keymap' => [
-            $type => 'id'
+            $type => 'id',
         ]];
 
         $builder->shouldReceive('pathConvention')
@@ -313,7 +298,7 @@ class RoutingBuilderTest extends TestCase
             $builder->pathConvention($type, $function, $keymap)
         );
 
-        // pathConvention test with keymap with empty array 
+        // pathConvention test with keymap with empty array
         $pathConventionKeymapEmptyArrayExpected = $function;
 
         $keymap = ['keymap' => []];
@@ -330,7 +315,7 @@ class RoutingBuilderTest extends TestCase
         );
 
         // pathConvention test with string keymap
-        $pathConventionKeymapExpected = $function . '/{id_name}';
+        $pathConventionKeymapExpected = $function.'/{id_name}';
 
         $keymap = ['keymap' => 'id_name'];
 
@@ -343,7 +328,7 @@ class RoutingBuilderTest extends TestCase
         $this->assertEquals($pathConventionKeymapExpected, $builder->pathConvention($type, $function, $keymap));
 
         // classConvention test
-        $classConventionExpected = Str::ucfirst($controller) . 'Controller@' . Str::camel(Str::lower($type) . '_' . $function);
+        $classConventionExpected = Str::ucfirst($controller).'Controller@'.Str::camel(Str::lower($type).'_'.$function);
 
         $builder->shouldReceive('classConvention')
             ->with($type, $controller, $function)
@@ -354,7 +339,7 @@ class RoutingBuilderTest extends TestCase
         $this->assertEquals($classConventionExpected, $builder->classConvention($type, $controller, $function));
 
         // namedConvention test
-        $namedConventionExpected = Str::lower($controller . '.' . $type . '.' . $function);
+        $namedConventionExpected = Str::lower($controller.'.'.$type.'.'.$function);
 
         $builder->shouldReceive('namedConvention')
             ->with($type, $controller, $function, [])
@@ -365,13 +350,11 @@ class RoutingBuilderTest extends TestCase
         $this->assertEquals($namedConventionExpected, $builder->namedConvention($type, $controller, $function, []));
     }
 
-
     /**
-     *
      * @test
      * @testdox Register component routing.
-     * @return void
      *
+     * @return void
      */
     public function theBuilderCanRegisterComponentRouting()
     {
@@ -384,9 +367,9 @@ class RoutingBuilderTest extends TestCase
                 'function' => [
                     'keymap' => 'id',
                     'auth' => true,
-                    'named' => ''
-                ]
-            ]
+                    'named' => '',
+                ],
+            ],
         ];
 
         $collection->shouldReceive('make')->with($component)->twice()->andReturnSelf();
@@ -407,11 +390,10 @@ class RoutingBuilderTest extends TestCase
     }
 
     /**
-     *
      * @test
      * @testdox Register API routing.
-     * @return void
      *
+     * @return void
      */
     public function theBuilderCanRegisterApiRouting()
     {
@@ -421,20 +403,20 @@ class RoutingBuilderTest extends TestCase
 
         $api = [
             'get' => [
-                ['path', 'controller@method', 'named']
+                ['path', 'controller@method', 'named'],
             ],
             'post' => [
-                ['path', 'controller@method', 'named']
+                ['path', 'controller@method', 'named'],
             ],
             'put' => [
-                ['path', 'controller@method', 'named']
+                ['path', 'controller@method', 'named'],
             ],
             'patch' => [
-                ['path', 'controller@method', 'named']
+                ['path', 'controller@method', 'named'],
             ],
             'delete' => [
-                ['path', 'controller@method', 'named']
-            ]
+                ['path', 'controller@method', 'named'],
+            ],
         ];
 
         $collection->shouldReceive('make')->with($api)->twice()->andReturnSelf();
@@ -455,11 +437,10 @@ class RoutingBuilderTest extends TestCase
     }
 
     /**
-     *
      * @test
      * @testdox Register Landing Routing.
-     * @return void
      *
+     * @return void
      */
     public function theBuilderCanRegisterLandingRouting()
     {

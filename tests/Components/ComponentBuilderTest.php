@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Feature\Components;
+namespace Joesama\Pintu\Tests\Feature\Components;
 
 use Exception;
-use ReflectionClass;
-use Illuminate\Routing\Router;
-use Joesama\Pintu\PintuProvider;
-use Orchestra\Testbench\TestCase;
-use Joesama\Pintu\Components\Manager;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Routing\Router;
+use Joesama\Pintu\Components\Manager;
+use Joesama\Pintu\PintuProvider;
 use Joesama\Pintu\Services\ComponentServices;
+use Orchestra\Testbench\TestCase;
+use ReflectionClass;
 
 class ComponentBuilderTest extends TestCase
 {
@@ -19,6 +19,7 @@ class ComponentBuilderTest extends TestCase
      * Define environment setup.
      *
      * @param  \Illuminate\Foundation\Application  $app
+     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
