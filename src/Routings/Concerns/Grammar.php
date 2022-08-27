@@ -17,7 +17,11 @@ trait Grammar
      */
     public function pathConvention(string $type, string $function, array $attributes): string
     {
-        $keymap = $this->keymapIsString(Arr::get($attributes, 'keymap'));
+        if ($function === 'index') {
+            return '';
+        }
+
+        $keymap = $this->keymapIsString(Arr::get($attributes, 'keymap', []) ?? []);
 
         if (! \is_array($keymap) || empty($keymap)) {
             return $function;
