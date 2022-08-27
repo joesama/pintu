@@ -2,13 +2,13 @@
 
 namespace Joesama\Pintu\Consoles;
 
-use ReflectionClass;
-use PhpSchool\CliMenu\CliMenu;
 use Illuminate\Console\Command;
-use PhpSchool\CliMenu\MenuStyle;
 use Illuminate\Filesystem\Filesystem;
 use Joesama\Pintu\Components\Manager;
 use PhpSchool\CliMenu\Builder\CliMenuBuilder;
+use PhpSchool\CliMenu\CliMenu;
+use PhpSchool\CliMenu\MenuStyle;
+use ReflectionClass;
 
 class ComponentGenerator extends Command
 {
@@ -47,8 +47,9 @@ class ComponentGenerator extends Command
                 ->setPlaceholderText($placeHolder)
                 ->setValidationFailedText('Please type full qualified service provider namespace')
                 ->setValidator(function ($provider) use ($placeHolder, $console) {
-                    if (!$console->fileIsExist($provider)) {
+                    if (! $console->fileIsExist($provider)) {
                         $this->setValidationFailedText("Class {$provider} must be exist");
+
                         return false;
                     }
 
@@ -66,14 +67,14 @@ class ComponentGenerator extends Command
         $menu = ($builder = new CliMenuBuilder)
             ->setWidth($builder->getTerminal()->getWidth() - 2 * 2)
             ->setMarginAuto()
-            ->setPadding(2, 4)
+//            ->setPadding(2, 4)
             ->setTitle('Component File Generator')
             ->setTitleSeparator('=')
             ->setBackgroundColour('166')
             ->setForegroundColour('254')
-            ->setExitButtonText("Leave console")
-            ->setUnselectedMarker('❅ ')
-            ->setSelectedMarker('> ')
+            ->setExitButtonText('Leave console')
+//            ->setUnselectedMarker('❅ ')
+//            ->setSelectedMarker('> ')
             ->addItem('Create component file', $itemCallable)
             ->build();
 
@@ -83,8 +84,7 @@ class ComponentGenerator extends Command
     /**
      * Check service provider file exist.
      *
-     * @param string $provider
-     *
+     * @param  string  $provider
      * @return bool
      */
     private function fileIsExist(string $provider): bool
@@ -95,10 +95,9 @@ class ComponentGenerator extends Command
     /**
      * Generate component file.
      *
-     * @param CliMenu $menu
-     * @param Filesystem $file
-     * @param string $providerOption
-     *
+     * @param  CliMenu  $menu
+     * @param  Filesystem  $file
+     * @param  string  $providerOption
      * @return void
      */
     private function makeComponentFile(CliMenu $menu, Filesystem $file, string $providerOption)
@@ -129,7 +128,7 @@ class ComponentGenerator extends Command
             if (strtolower($force) === strtolower('N')) {
                 $menu->confirm('Component file are remained same!!!', $successStyle)->display('OK!');
             } elseif (strtolower($force) === strtolower('Y')) {
-                $file->copy($filePath, \str_replace('component.php', date('dmyHis') . '.php', $filePath));
+                $file->copy($filePath, \str_replace('component.php', date('dmyHis').'.php', $filePath));
 
                 $this->copyStubToLocation($file, $filePath, $stub);
 
@@ -145,15 +144,14 @@ class ComponentGenerator extends Command
     /**
      * Copy stubs to location.
      *
-     * @param Filesystem $file
-     * @param string $filePath
+     * @param  Filesystem  $file
+     * @param  string  $filePath
      * @param $stub
-     *
      * @return void
      */
     private function copyStubToLocation(Filesystem $file, string $filePath, $stub)
     {
-        if (!$file->isDirectory(dirname($filePath))) {
+        if (! $file->isDirectory(dirname($filePath))) {
             $file->makeDirectory(dirname($filePath), 0655, true, true);
         }
 

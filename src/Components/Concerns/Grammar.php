@@ -9,15 +9,14 @@ trait Grammar
     /**
      * Register default controller namespace.
      *
-     * @param ReflectionClass $reflectionClass
-     *
+     * @param  ReflectionClass  $reflectionClass
      * @return array
      */
     public function registerNamespace(ReflectionClass $reflectionClass): array
     {
         return [
-            'component' => $reflectionClass->getNamespaceName() . '\Http\ComponentControllers',
-            'api' => $reflectionClass->getNamespaceName() . '\Http\ApiControllers'
+            'component' => $reflectionClass->getNamespaceName().'\Http\ComponentControllers',
+            'api' => $reflectionClass->getNamespaceName().'\Http\ApiControllers',
         ];
     }
 }

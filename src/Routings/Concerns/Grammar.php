@@ -10,28 +10,27 @@ trait Grammar
     /**
      * Path naming convention definition.
      *
-     * @param string $type
-     * @param string $function
-     * @param array $attributes
-     *
+     * @param  string  $type
+     * @param  string  $function
+     * @param  array  $attributes
      * @return string
      */
     public function pathConvention(string $type, string $function, array $attributes): string
     {
         $keymap = $this->keymapIsString(Arr::get($attributes, 'keymap'));
 
-        if (!\is_array($keymap) || empty($keymap)) {
+        if (! \is_array($keymap) || empty($keymap)) {
             return $function;
         } else {
             $keymap = collect($keymap)->map(function ($id, $key) use ($type) {
-                if (!is_int($key) && strtolower($key) === strtolower($type)) {
-                    return '{' . $id . '}';
+                if (! is_int($key) && strtolower($key) === strtolower($type)) {
+                    return '{'.$id.'}';
                 }
 
                 return null;
             })->implode('/');
 
-            return $function . '/' . $keymap;
+            return $function.'/'.$keymap;
         }
     }
 
@@ -39,7 +38,6 @@ trait Grammar
      * Check if keymap is string.
      *
      * @param $keymap
-     *
      * @return array
      */
     private function keymapIsString($keymap): array
@@ -54,8 +52,7 @@ trait Grammar
     /**
      * Append ID parameter.
      *
-     * @param array $keymap
-     *
+     * @param  array  $keymap
      * @return array
      */
     private function appendIdParameter(array $keymap): array
@@ -73,25 +70,23 @@ trait Grammar
     /**
      * Class naming convention definition.
      *
-     * @param string $type
-     * @param string $controller
-     * @param string $function
-     *
+     * @param  string  $type
+     * @param  string  $controller
+     * @param  string  $function
      * @return string
      */
     public function classConvention(string $type, string $controller, string $function): string
     {
-        return Str::ucfirst($controller) . 'Controller@' . Str::camel(Str::lower($type) . '_' . $function);
+        return Str::ucfirst($controller).'Controller@'.Str::camel(Str::lower($type).'_'.$function);
     }
 
     /**
      * Router name naming convention.
      *
-     * @param string $type
-     * @param string $controller
-     * @param string $function
-     * @param array $attributes
-     *
+     * @param  string  $type
+     * @param  string  $controller
+     * @param  string  $function
+     * @param  array  $attributes
      * @return string
      */
     public function namedConvention(string $type, string $controller, string $function, array $attributes): string
@@ -99,11 +94,11 @@ trait Grammar
         $named = Arr::get($attributes, 'named', null);
 
         if ($named === '' || $named === null) {
-            $named = Str::lower($controller . '.' . $function);
+            $named = Str::lower($controller.'.'.$function);
         }
 
         if (\is_string($named)) {
-            return Str::lower($type . '.' . $named);
+            return Str::lower($type.'.'.$named);
         }
         $type = Str::lower($type);
 
@@ -112,7 +107,7 @@ trait Grammar
         if (collect($names)->has($type)) {
             return Str::lower(collect($names)->get($type, \null));
         } else {
-            return Str::lower($type . '.' . $controller . '.' . $function);
+            return Str::lower($type.'.'.$controller.'.'.$function);
         }
     }
 }

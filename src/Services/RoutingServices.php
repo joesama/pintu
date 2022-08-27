@@ -2,21 +2,20 @@
 
 namespace Joesama\Pintu\Services;
 
-use ReflectionClass;
-use Illuminate\Support\Arr;
 use Illuminate\Routing\Router;
-use Joesama\Pintu\Routings\Manager;
+use Illuminate\Support\Arr;
 use Joesama\Pintu\Components\Manager as Component;
+use Joesama\Pintu\Routings\Manager;
+use ReflectionClass;
 
 class RoutingServices
 {
     /**
      * Register service provider routing component.
      *
-     * @param string $providerNameSpace
-     * @param Router $router
-     * @param string|null $namespace
-     *
+     * @param  string  $providerNameSpace
+     * @param  Router  $router
+     * @param  string|null  $namespace
      * @return void
      */
     public static function router(string $providerNameSpace, Router $router, ?string $namespace = null): void

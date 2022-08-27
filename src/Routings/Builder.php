@@ -2,10 +2,10 @@
 
 namespace Joesama\Pintu\Routings;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Joesama\Pintu\Routings\Concerns\Grammar;
 
 class Builder
@@ -29,7 +29,7 @@ class Builder
     /**
      * Construct routing builder.
      *
-     * @param Router $router
+     * @param  Router  $router
      */
     public function __construct(Router $router)
     {
@@ -39,15 +39,14 @@ class Builder
     /**
      * Component routing registration.
      *
-     * @param Collection $component
-     *
+     * @param  Collection  $component
      * @return void
      */
     public function componentRouting(Collection $components, string $namespace)
     {
         $options = [
             'namespace' => $namespace,
-            'middleware' => ['web']
+            'middleware' => ['web'],
         ];
 
         $components->each(function ($component, $controller) use ($options) {
@@ -84,15 +83,14 @@ class Builder
     /**
      * Landing routing registration.
      *
-     * @param Collection $component
-     *
+     * @param  Collection  $component
      * @return void
      */
     public function landingRouting(string $namespace)
     {
         $options = [
             'namespace' => $namespace,
-            'middleware' => ['web', 'guest']
+            'middleware' => ['web', 'guest'],
         ];
 
         $type = 'GET';
@@ -100,7 +98,7 @@ class Builder
         $function = 'default';
         $attributes = [];
 
-        $this->router->group($options, function (Router $router) use ($type, $controller, $function, $attributes) {
+        $this->router->group($options, function (Router $router) use ($type, $controller, $function) {
             $router->addRoute(
                 Str::upper($type),
                 '/',
@@ -114,8 +112,7 @@ class Builder
     /**
      * API routing registration.
      *
-     * @param Collection $api
-     *
+     * @param  Collection  $api
      * @return void
      */
     public function apiRouting(Collection $apis, string $namespace)
@@ -123,20 +120,20 @@ class Builder
         $options = [
             'namespace' => $namespace,
             'prefix' => 'api',
-            'middleware' => ['auth:api']
+            'middleware' => ['auth:api'],
         ];
 
         $this->router->group($options, function (Router $router) use ($apis) {
             $apis->each(function ($routes, $method) use ($router) {
-                if (!empty($routes)) {
-                    list($path, $controller, $named) = Arr::first($routes);
+                if (! empty($routes)) {
+                    [$path, $controller, $named] = Arr::first($routes);
 
                     $router->addRoute(
                         Str::upper($method),
                         $path,
                         Str::ucfirst($controller)
                     )->name(
-                        'api.' . $named
+                        'api.'.$named
                     );
                 }
             });

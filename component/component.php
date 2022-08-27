@@ -4,7 +4,7 @@ return [
     'component' => [],
     'api' => [
         'get' => [
-            
+
         ],
         'post' => [
 
@@ -17,6 +17,6 @@ return [
         ],
         'delete' => [
 
-        ]
-    ]
+        ],
+    ],
 ];

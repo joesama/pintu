@@ -2,10 +2,10 @@
 
 namespace Joesama\Pintu\Services;
 
-use ReflectionClass;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Joesama\Pintu\Components\Manager;
-use Illuminate\Contracts\Support\Arrayable;
+use ReflectionClass;
 
 class ComponentServices implements Arrayable
 {
@@ -19,7 +19,7 @@ class ComponentServices implements Arrayable
     /**
      * Initiate Component Services.
      *
-     * @param array $provider
+     * @param  array  $provider
      */
     public function __construct(string $providerNameSpace)
     {

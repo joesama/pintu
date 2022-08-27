@@ -3,11 +3,11 @@
 namespace Joesama\Pintu\Components;
 
 use Exception;
-use ReflectionClass;
 use Illuminate\Support\Collection;
-use Symfony\Component\Finder\Finder;
 use Illuminate\Support\ServiceProvider;
 use Joesama\Pintu\Components\Concerns\Grammar;
+use ReflectionClass;
+use Symfony\Component\Finder\Finder;
 
 class Manager
 {
@@ -41,13 +41,13 @@ class Manager
     /**
      * Initiate Component Manager.
      *
-     * @param ReflectionClass $providerReflection
+     * @param  ReflectionClass  $providerReflection
      */
     public function __construct(ReflectionClass $providerReflection)
     {
-        if (!$providerReflection->isSubclassOf(ServiceProvider::class)) {
+        if (! $providerReflection->isSubclassOf(ServiceProvider::class)) {
             throw new Exception(
-                $providerReflection->getName() . ' must an instance of ' .  \basename(ServiceProvider::class),
+                $providerReflection->getName().' must an instance of '.\basename(ServiceProvider::class),
                 1
             );
         }
@@ -96,7 +96,7 @@ class Manager
      */
     public function getComponentFilePath(): string
     {
-        return $this->componentPath . '/' . self::FILE_NAME . self::FILE_EXT;
+        return $this->componentPath.'/'.self::FILE_NAME.self::FILE_EXT;
     }
 
     /**
@@ -106,7 +106,7 @@ class Manager
      */
     public function getComponentFileStub(): string
     {
-        return __DIR__ . '/stubs/component.stub';
+        return __DIR__.'/stubs/component.stub';
     }
 
     /**
@@ -132,7 +132,7 @@ class Manager
             $componentFile = Collection::make(
                 Finder::create()
                     ->files()
-                    ->name(self::FILE_NAME . self::FILE_EXT)
+                    ->name(self::FILE_NAME.self::FILE_EXT)
                     ->in($this->componentPath)
             )->first();
 
@@ -147,8 +147,7 @@ class Manager
     /**
      * Get the path for define component.
      *
-     * @param ReflectionClass $providerReflection
-     *
+     * @param  ReflectionClass  $providerReflection
      * @return string
      */
     private function componentPath(ReflectionClass $providerReflection): string
@@ -157,6 +156,6 @@ class Manager
 
         $baseDir = dirname($providerReflection->getFileName(), $classNameSpace->count());
 
-        return $baseDir . '/' . self::FILE_NAME;
+        return $baseDir.'/'.self::FILE_NAME;
     }
 }

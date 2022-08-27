@@ -19,7 +19,6 @@ class ComponentBuilderTest extends TestCase
      * Define environment setup.
      *
      * @param  \Illuminate\Foundation\Application  $app
-     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -45,6 +44,8 @@ class ComponentBuilderTest extends TestCase
     /**
      * @test
      * @testdox  Validate component file path and stub.
+     * @throws \ReflectionException
+     * @throws Exception
      */
     public function theComponentFilePathAndStub()
     {

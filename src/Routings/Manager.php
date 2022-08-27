@@ -2,9 +2,8 @@
 
 namespace Joesama\Pintu\Routings;
 
-use Illuminate\Support\Arr;
 use Illuminate\Routing\Router;
-use Joesama\Pintu\Routings\Builder;
+use Illuminate\Support\Arr;
 use Joesama\Pintu\Components\Manager as ComponentManager;
 
 class Manager
@@ -26,7 +25,7 @@ class Manager
     /**
      * Initialize routes manager.
      *
-     * @param ComponentManager $component
+     * @param  ComponentManager  $component
      */
     public function __construct(ComponentManager $component)
     {
@@ -54,8 +53,7 @@ class Manager
     /**
      * Set default namespace.
      *
-     * @param string|null $namespace
-     *
+     * @param  string|null  $namespace
      * @return void
      */
     public function setNameSpace(string $namespace = null)

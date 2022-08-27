@@ -2,7 +2,6 @@
 
 namespace Joesama\Pintu\Tests;
 
-use Joesama\Pintu\Consoles\ComponentGenerator;
 use Joesama\Pintu\PintuProvider;
 use Orchestra\Testbench\TestCase;
 

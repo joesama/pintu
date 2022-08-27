@@ -1,10 +1,22 @@
 <?php
 
 return [
-    'component' => [],
+    'component' => [
+//        'controller_name_here' => [
+//            'method_name_here' => [
+//                'keymap' => "define your key pass to route",
+//                'named' => [
+//                   'get' => 'give your route a name'
+//                ],
+//                'auth' => true,
+//                'only' => ['get'],
+//
+//            ]
+//        ]
+    ],
     'api' => [
         'get' => [
-            
+
         ],
         'post' => [
 

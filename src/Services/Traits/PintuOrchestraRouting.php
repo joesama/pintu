@@ -10,7 +10,6 @@ trait PintuOrchestraRouting
      * Build route generator callback.
      *
      * @param  string  $path
-     *
      * @return \Closure
      */
     protected function loadRoutes()
