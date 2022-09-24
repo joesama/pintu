@@ -118,7 +118,7 @@ class Builder
     public function apiRouting(Collection $apis, string $namespace)
     {
         $options = [
-            'namespace' => $namespace,
+            'namespace' => $namespace . '\Api',
             'prefix' => 'api',
             'middleware' => ['auth:api'],
         ];
@@ -126,15 +126,16 @@ class Builder
         $this->router->group($options, function (Router $router) use ($apis) {
             $apis->each(function ($routes, $method) use ($router) {
                 if (! empty($routes)) {
-                    [$path, $controller, $named] = Arr::first($routes);
-
-                    $router->addRoute(
-                        Str::upper($method),
-                        $path,
-                        Str::ucfirst($controller)
-                    )->name(
-                        'api.'.$named
-                    );
+                    foreach($routes as $apiRoute) {
+                        list($path, $controller, $named) = $apiRoute;
+                        $this->router->addRoute(
+                            Str::upper($method),
+                            $path,
+                            Str::ucfirst($controller)
+                        )->name(
+                            'api.'.$named
+                        );
+                    }
                 }
             });
         });
