@@ -50,7 +50,7 @@ trait Grammar
             return (Str::length($keymap) > 0) ? Arr::wrap($keymap) : [];
         }
 
-        return $keymap;
+        return $keymap ?? [];
     }
 
     /**
