@@ -44,6 +44,7 @@ class ComponentBuilderTest extends TestCase
     /**
      * @test
      * @testdox  Validate component file path and stub.
+     *
      * @throws \ReflectionException
      * @throws Exception
      */

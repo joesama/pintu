@@ -120,14 +120,14 @@ class Builder
         $options = [
             'namespace' => $namespace . '\Api',
             'prefix' => 'api',
-//            'middleware' => ['auth:api'],
+            'middleware' => ['auth:sanctum'],
         ];
 
         $this->router->group($options, function (Router $router) use ($apis) {
-            $apis->each(function ($routes, $method) use ($router) {
+            $apis->each(function ($routes, $method) {
                 if (! empty($routes)) {
-                    foreach($routes as $apiRoute) {
-                        list($path, $controller, $named) = $apiRoute;
+                    foreach ($routes as $apiRoute) {
+                        [$path, $controller, $named] = $apiRoute;
                         $this->router->addRoute(
                             Str::upper($method),
                             $path,

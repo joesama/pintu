@@ -16,7 +16,7 @@ class PintuProvider extends ServiceProvider
      * @var array
      */
     protected $console = [
-        ComponentGenerator::class
+        ComponentGenerator::class,
     ];
 
     /**

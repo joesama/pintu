@@ -38,7 +38,7 @@ class ComponentGenerator extends Command
         $console = $this;
 
         $itemCallable = function (CliMenu $menu) use ($placeHolder, $console, $file) {
-            $successStyle = (new MenuStyle)
+            $successStyle = (new MenuStyle())
                 ->setBg('254')
                 ->setFg('166');
 
@@ -64,7 +64,7 @@ class ComponentGenerator extends Command
             }
         };
 
-        $menu = ($builder = new CliMenuBuilder)
+        $menu = ($builder = new CliMenuBuilder())
             ->setWidth($builder->getTerminal()->getWidth() - 2 * 2)
             ->setMarginAuto()
 //            ->setPadding(2, 4)
@@ -110,7 +110,7 @@ class ComponentGenerator extends Command
 
         $stub = $file->get($manager->getComponentFileStub());
 
-        $successStyle = (new MenuStyle)
+        $successStyle = (new MenuStyle())
             ->setBg('254')
             ->setFg('166');
 
