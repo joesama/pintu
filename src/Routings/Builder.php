@@ -120,7 +120,7 @@ class Builder
         $options = [
             'namespace' => $namespace . '\Api',
             'prefix' => 'api',
-            'middleware' => ['api'],
+            'middleware' => ['auth:sanctum'],
         ];
 
         $this->router->group($options, function (Router $router) use ($apis) {
